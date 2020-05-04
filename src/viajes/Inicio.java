@@ -16,6 +16,7 @@ public class Inicio extends javax.swing.JFrame {
      * Creates new form Inicio
      */
     public Inicio() {
+        CatalogoActual = "DASHBOARD";
         initComponents();
     }
 
