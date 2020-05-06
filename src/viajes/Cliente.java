@@ -20,7 +20,7 @@ public class Cliente {
     public String Direccion;
     public double PorcentajeVenta;
     public String Estatus;
-    public static String Header[] = {"Razón Social","razonsocial"};
+    public static String Header[] = {"Id","Razón Social","Nombre Comercial","Tipo","Dirección","Porcentaje Venta","Estatus"};
     
     public Cliente(int idcliente,String razonsocial, String nombrecomercial,String tipo,String direccion,double porcentajeventa,String estatus){
         IdCliente = idcliente;
