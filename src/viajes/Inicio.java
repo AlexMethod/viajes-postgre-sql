@@ -5,12 +5,24 @@
  */
 package viajes;
 
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 /**
  *
  * @author USUARIO DELL
  */
 public class Inicio extends javax.swing.JFrame {
 
+    //Conexion con BD
+    DefaultTableModel md;
+    String data[][] = {};
+    String cabeza[] = {"idcliente","razonsocial"};
+    
+    String url = "jdbc:postgresql://localhost:5432/Viajes";
+    String usuario = "postgres";
+    String contrasena = "postgres";
+    
+    
     private String CatalogoActual;
     /**
      * Creates new form Inicio
@@ -19,6 +31,53 @@ public class Inicio extends javax.swing.JFrame {
         initComponents();
         txtTitle.setText(CatalogoActual);
         CatalogoActual = "DASHBOARD";
+        conexion();
+    }
+    
+    public void conexion(){
+        md = new DefaultTableModel(data,cabeza);
+        jtTabla.setModel(md);
+        
+        try
+        {
+            GetAllData();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error de conexion" + e.getMessage());
+        }
+    }
+    
+    public void GetAllData(){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            String sql = "SELECT * FROM informacion.cliente";
+            ResultSet result = sentencia.executeQuery(sql);
+            DefaultTableModel model = (DefaultTableModel) jtTabla.getModel();
+            model.setRowCount(0);
+
+            while(result.next())
+            {
+                //Base de datos
+                String IdCliente = result.getString("idcliente");
+                String RazonSocial = result.getString("razonsocial");
+
+                //Tabla de formulario
+                String datos[] = {IdCliente,RazonSocial};
+
+                md.addRow(datos);
+            }
+            
+            result.close();
+            sentencia.close();
+        }
+        catch(Exception err){
+            System.out.println("Error al obtener los datos\n" + err.getMessage());
+        }
     }
 
     /**
@@ -44,7 +103,7 @@ public class Inicio extends javax.swing.JFrame {
         btnHistorialViajes = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtTabla = new javax.swing.JTable();
         txtTitle = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
 
@@ -193,7 +252,7 @@ public class Inicio extends javax.swing.JFrame {
             .addGap(0, 49, Short.MAX_VALUE)
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -204,7 +263,7 @@ public class Inicio extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jtTabla);
 
         txtTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         txtTitle.setText("Title");
@@ -357,7 +416,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jtTabla;
     private javax.swing.JLabel txtTitle;
     // End of variables declaration//GEN-END:variables
 }
