@@ -7,6 +7,7 @@ package viajes;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import java.text.MessageFormat;
 /**
  *
  * @author USUARIO DELL
@@ -16,7 +17,7 @@ public class Inicio extends javax.swing.JFrame {
     //Conexion con BD
     DefaultTableModel md;
     String data[][] = {};
-    String cabeza[] = {"idcliente","razonsocial"};
+    String cabeza[] = {};
     
     String url = "jdbc:postgresql://localhost:5432/Viajes";
     String usuario = "postgres";
@@ -31,45 +32,36 @@ public class Inicio extends javax.swing.JFrame {
         initComponents();
         txtTitle.setText(CatalogoActual);
         CatalogoActual = "DASHBOARD";
-        conexion();
     }
     
-    public void conexion(){
-        md = new DefaultTableModel(data,cabeza);
-        jtTabla.setModel(md);
-        
-        try
-        {
-            GetAllData();
-        }
-        catch(Exception e)
-        {
-            System.out.println("Error de conexion" + e.getMessage());
-        }
-    }
     
-    public void GetAllData(){
+    public void GetAllData(String esquema, String tabla){
         try
         {
             Class.forName("org.postgresql.Driver");
             Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
             java.sql.Statement sentencia = conexion.createStatement();
 
-            String sql = "SELECT * FROM informacion.cliente";
+            Object[] params = new Object[]{esquema, tabla};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1}", params);
+            
             ResultSet result = sentencia.executeQuery(sql);
             DefaultTableModel model = (DefaultTableModel) jtTabla.getModel();
             model.setRowCount(0);
 
             while(result.next())
             {
-                //Base de datos
-                String IdCliente = result.getString("idcliente");
-                String RazonSocial = result.getString("razonsocial");
-
-                //Tabla de formulario
-                String datos[] = {IdCliente,RazonSocial};
-
-                md.addRow(datos);
+                String row[] = {};
+                switch(CatalogoActual){
+                    case "CLIENTES":
+                        //Se le asignan los encabezados a la tabla
+                        md = new DefaultTableModel(data,Cliente.Header);
+                        jtTabla.setModel(md);
+                        //Se obtiene el conjunto de datos para una tupla
+                        row = Cliente.GetRow(result);
+                        break;
+                }
+                md.addRow(row);
             }
             
             result.close();
@@ -309,6 +301,7 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         CatalogoActual = "CLIENTES";
         txtTitle.setText(CatalogoActual);
+        GetAllData("informacion","cliente");
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSucursalesActionPerformed
