@@ -13,11 +13,13 @@ import java.text.MessageFormat;
  * @author USUARIO DELL
  */
 public class Inicio extends javax.swing.JFrame {
-
+    
+    //Modales para los formularios
+    AgregarCliente modalAgregarCliente = null;
+    
     //Conexion con BD
     DefaultTableModel md;
     String data[][] = {};
-    String cabeza[] = {};
     
     String url = "jdbc:postgresql://localhost:5432/Viajes";
     String usuario = "postgres";
@@ -30,6 +32,7 @@ public class Inicio extends javax.swing.JFrame {
      */
     public Inicio() {
         initComponents();
+        setLocationRelativeTo(null);
         txtTitle.setText(CatalogoActual);
         CatalogoActual = "DASHBOARD";
     }
@@ -100,6 +103,8 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Viajes");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 51, 51));
 
@@ -261,6 +266,11 @@ public class Inicio extends javax.swing.JFrame {
         txtTitle.setText("Title");
 
         btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -357,6 +367,15 @@ public class Inicio extends javax.swing.JFrame {
         CatalogoActual = "DASHBOARD";
         txtTitle.setText(CatalogoActual);
     }//GEN-LAST:event_btnDashboardActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        // TODO add your handling code here:
+        switch(CatalogoActual){
+            case "CLIENTES":
+                modalAgregarCliente = new AgregarCliente(this);
+                break;
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
      * @param args the command line arguments
