@@ -16,7 +16,7 @@ public class Viajes {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println("Hola soy el sistema de viajes de postresql");
+        Inicio inicio = new  Inicio();
     }
     
 }

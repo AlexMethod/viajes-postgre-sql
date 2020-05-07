@@ -35,6 +35,7 @@ public class Inicio extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         txtTitle.setText(CatalogoActual);
         CatalogoActual = "DASHBOARD";
+        setVisible(true);
     }
     
     
@@ -51,15 +52,22 @@ public class Inicio extends javax.swing.JFrame {
             ResultSet result = sentencia.executeQuery(sql);
             DefaultTableModel model = (DefaultTableModel) jtTabla.getModel();
             model.setRowCount(0);
+            
+            //Asignacion de los ecabezados
+            switch(CatalogoActual){
+                case "CLIENTES":
+                    //Se le asignan los encabezados a la tabla
+                    md = new DefaultTableModel(data,Cliente.Header);
+                    jtTabla.setModel(md);
+                    break;
+            }
 
+            //Se itera sobre cada una de las tuplas para agregarlas a la tabla
             while(result.next())
             {
                 String row[] = {};
                 switch(CatalogoActual){
                     case "CLIENTES":
-                        //Se le asignan los encabezados a la tabla
-                        md = new DefaultTableModel(data,Cliente.Header);
-                        jtTabla.setModel(md);
                         //Se obtiene el conjunto de datos para una tupla
                         row = Cliente.GetRow(result);
                         break;
@@ -377,6 +385,32 @@ public class Inicio extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    
+    //CLIENTES
+    public void GuardaCliente(Cliente cliente) throws Exception{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+            Object[] params = new Object[]{cliente.RazonSocial, cliente.NombreComercial,cliente.Tipo,cliente.Direccion,cliente.PorcentajeVenta,cliente.Estatus};
+            String sql = 
+                    MessageFormat.format("INSERT INTO informacion.cliente(razonsocial,nombrecomercial,tipo,direccion,porcentajeventa,estatus) VALUES(''{0}'',''{1}'',''{2}'',''{3}'',{4},''{5}'')", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","cliente");
+            modalAgregarCliente.dispose();
+            conexion.close();
+    }
+    
+    public void EditaCliente(Cliente cliente){
+        
+    }
+    
+    public void EliminaCliente(Cliente cliente){
+        
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
