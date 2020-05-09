@@ -5,7 +5,9 @@
  */
 package viajes;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,17 +32,62 @@ public class AgregarCliente extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         Accion = "ALTA";
-        loadCboTipo();
+        loadCboTipo(null);
         
     }
     
-    public void loadCboTipo(){
+    public void loadCboTipo(ComboboxItem defItem){
         cboTipo.removeAllItems();
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         model.addElement(new ComboboxItem("FISCAL",1));
-        model.addElement(new ComboboxItem("ORIGEN",1));
-        model.addElement(new ComboboxItem("DESTINO",1));
+        model.addElement(new ComboboxItem("ORIGEN",2));
+        model.addElement(new ComboboxItem("DESTINO",3));
         cboTipo.setModel(model);
+        if(defItem != null){
+            cboTipo.setSelectedItem(defItem);
+        }
+    }
+    
+    public int getIndexOfItem(String value){
+        int index = 0;
+        DefaultComboBoxModel model = (DefaultComboBoxModel)cboTipo.getModel();
+        for(int i = 0; i < model.getSize(); i++){
+            ComboboxItem item = (ComboboxItem)model.getElementAt(i);
+            String textItem = item.getText();
+            if(textItem.equals(value)){
+                 index =  i;
+            }
+        }
+        return index;
+    }
+    
+    public void setVisible(Cliente cliente,String accion){
+        Accion = accion;
+        if(Accion == "EDITAR"){
+            txtRazonSocial.setText(cliente.RazonSocial);
+            txtNombreComercial.setText(cliente.NombreComercial);
+            cboTipo.setSelectedIndex(getIndexOfItem(cliente.Tipo));
+            txtPorcentajeVenta.setText(cliente.PorcentajeVenta + "");
+            txtDireccion.setText(cliente.Direccion);
+            btnGuardar.setText("Editar");
+            setVisible(true);
+        } 
+        else if(Accion == "ELIMINAR"){
+            txtRazonSocial.setText(cliente.RazonSocial);
+            txtNombreComercial.setText(cliente.NombreComercial);
+            cboTipo.setSelectedIndex(getIndexOfItem(cliente.Tipo));
+            txtPorcentajeVenta.setText(cliente.PorcentajeVenta + "");
+            txtDireccion.setText(cliente.Direccion);
+            btnGuardar.setText("Eliminar");
+            setVisible(true);
+            
+            txtRazonSocial.setEnabled(false);
+            txtNombreComercial.setEnabled(false);
+            cboTipo.setEnabled(false);
+            txtPorcentajeVenta.setEnabled(false);
+            txtDireccion.setEnabled(false);
+            btnGuardar.setText("Eliminar");
+        }
     }
 
     /**
@@ -90,6 +137,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         cboTipo.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
         cboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        btnCerrar.setBackground(new java.awt.Color(204, 204, 255));
         btnCerrar.setText("Cerrar");
         btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -97,6 +145,7 @@ public class AgregarCliente extends javax.swing.JFrame {
             }
         });
 
+        btnGuardar.setBackground(new java.awt.Color(204, 204, 255));
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -213,7 +262,8 @@ public class AgregarCliente extends javax.swing.JFrame {
             }
         }
         catch(Exception error){
-            System.out.println("Error al guardar el registro\n" + error.getMessage());
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);
+            
         }
         
     }//GEN-LAST:event_btnGuardarActionPerformed

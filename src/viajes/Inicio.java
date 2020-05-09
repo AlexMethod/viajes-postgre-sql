@@ -8,11 +8,15 @@ package viajes;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.text.MessageFormat;
+import javax.swing.JOptionPane;
 /**
  *
  * @author USUARIO DELL
  */
 public class Inicio extends javax.swing.JFrame {
+    
+    //Instancias de registros seleccionados
+    Cliente ClienteActual = null;
     
     //Modales para los formularios
     AgregarCliente modalAgregarCliente = null;
@@ -33,9 +37,15 @@ public class Inicio extends javax.swing.JFrame {
     public Inicio() {
         initComponents();
         setLocationRelativeTo(null);
-        txtTitle.setText(CatalogoActual);
         CatalogoActual = "DASHBOARD";
+        txtTitle.setText(CatalogoActual);
         setVisible(true);
+        
+        //Configuracion botones
+        btnAgregar.setVisible(false);
+        btnEditar.setVisible(false);
+        btnEliminar.setVisible(false);
+        jtTabla.setVisible(false);
     }
     
     
@@ -109,6 +119,8 @@ public class Inicio extends javax.swing.JFrame {
         jtTabla = new javax.swing.JTable();
         txtTitle = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Viajes");
@@ -268,15 +280,37 @@ public class Inicio extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jtTabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtTablaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtTabla);
 
         txtTitle.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         txtTitle.setText("Title");
 
+        btnAgregar.setBackground(new java.awt.Color(51, 102, 255));
         btnAgregar.setText("Agregar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setBackground(new java.awt.Color(255, 0, 51));
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setBackground(new java.awt.Color(51, 255, 51));
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
             }
         });
 
@@ -293,7 +327,12 @@ public class Inicio extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(52, 52, 52)
+                                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtTitle)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 697, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -307,7 +346,10 @@ public class Inicio extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addComponent(txtTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -320,60 +362,120 @@ public class Inicio extends javax.swing.JFrame {
         CatalogoActual = "CLIENTES";
         txtTitle.setText(CatalogoActual);
         GetAllData("informacion","cliente");
+        
+        //Configuración de botones
+        btnAgregar.setVisible(true);
+        btnEditar.setVisible(true);
+        btnEliminar.setVisible(true);
+        jtTabla.setVisible(true);
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnSucursalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSucursalesActionPerformed
         // TODO add your handling code here:
         CatalogoActual = "SUCURSALES";
         txtTitle.setText(CatalogoActual);
+        
+        //Configuración de botones
+        btnAgregar.setVisible(true);
+        btnEditar.setVisible(true);
+        btnEliminar.setVisible(true);
+        jtTabla.setVisible(true);
     }//GEN-LAST:event_btnSucursalesActionPerformed
 
     private void btnUnidadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnidadesActionPerformed
         // TODO add your handling code here:
         CatalogoActual = "UNIDADES";
         txtTitle.setText(CatalogoActual);
+        
+        //Configuración de botones
+        btnAgregar.setVisible(true);
+        btnEditar.setVisible(true);
+        btnEliminar.setVisible(true);
+        jtTabla.setVisible(true);
     }//GEN-LAST:event_btnUnidadesActionPerformed
 
     private void btnTransportistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransportistasActionPerformed
         // TODO add your handling code here:
         CatalogoActual = "TRANSPORTISTAS";
         txtTitle.setText(CatalogoActual);
+        
+        //Configuración de botones
+        btnAgregar.setVisible(true);
+        btnEditar.setVisible(true);
+        btnEliminar.setVisible(true);
+        jtTabla.setVisible(true);
     }//GEN-LAST:event_btnTransportistasActionPerformed
 
     private void btnRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRutasActionPerformed
         // TODO add your handling code here:
         CatalogoActual = "RUTAS";
         txtTitle.setText(CatalogoActual);
+        
+        //Configuración de botones
+        btnAgregar.setVisible(true);
+        btnEditar.setVisible(true);
+        btnEliminar.setVisible(true);
+        jtTabla.setVisible(true);
     }//GEN-LAST:event_btnRutasActionPerformed
 
     private void btnTarifasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTarifasActionPerformed
         // TODO add your handling code here:
         CatalogoActual = "TARIFAS";
         txtTitle.setText(CatalogoActual);
+        
+        //Configuración de botones
+        btnAgregar.setVisible(true);
+        btnEditar.setVisible(false);
+        btnEliminar.setVisible(true);
+        jtTabla.setVisible(true);
     }//GEN-LAST:event_btnTarifasActionPerformed
 
     private void btnPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedidosActionPerformed
         // TODO add your handling code here:
         CatalogoActual = "PEDIDOS";
         txtTitle.setText(CatalogoActual);
+        
+        //Configuración de botones
+        btnAgregar.setVisible(true);
+        btnEditar.setVisible(false);
+        btnEliminar.setVisible(true);
+        jtTabla.setVisible(true);
     }//GEN-LAST:event_btnPedidosActionPerformed
 
     private void btnViajesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViajesActionPerformed
         // TODO add your handling code here:
         CatalogoActual = "VIAJES";
         txtTitle.setText(CatalogoActual);
+        
+        //Configuración de botones
+        btnAgregar.setVisible(true);
+        btnEditar.setVisible(false);
+        btnEliminar.setVisible(true);
+        jtTabla.setVisible(true);
     }//GEN-LAST:event_btnViajesActionPerformed
 
     private void btnHistorialViajesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialViajesActionPerformed
         // TODO add your handling code here:
         CatalogoActual = "HISTORIAL_VIAJES";
         txtTitle.setText(CatalogoActual);
+        
+        //Configuración de botones
+        btnAgregar.setVisible(false);
+        btnEditar.setVisible(false);
+        btnEliminar.setVisible(false);
+        jtTabla.setVisible(true);
     }//GEN-LAST:event_btnHistorialViajesActionPerformed
 
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
         // TODO add your handling code here:
         CatalogoActual = "DASHBOARD";
         txtTitle.setText(CatalogoActual);
+        
+        //Configuración de botones
+        btnAgregar.setVisible(false);
+        btnEditar.setVisible(false);
+        btnEliminar.setVisible(false);
+        jtTabla.setVisible(false);
     }//GEN-LAST:event_btnDashboardActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
@@ -385,9 +487,52 @@ public class Inicio extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        switch(CatalogoActual){
+            case "CLIENTES":
+                modalAgregarCliente = new AgregarCliente(this);
+                if(ClienteActual != null) modalAgregarCliente.setVisible(ClienteActual,"ELIMINAR");
+                break;
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        switch(CatalogoActual){
+            case "CLIENTES":
+                modalAgregarCliente = new AgregarCliente(this);
+                if(ClienteActual != null) modalAgregarCliente.setVisible(ClienteActual,"EDITAR");
+                break;
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    //SELECCIONA UN REGISTRO
+    private void jtTablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaMouseClicked
+        // TODO add your handling code here:
+        
+        int row = jtTabla.getSelectedRow();
+        int col = jtTabla.getSelectedColumn();
+        
+        DefaultTableModel model = (DefaultTableModel) jtTabla.getModel();
+        int IdRegistro = Integer.parseInt(model.getValueAt(row, 0).toString());
+        
+        switch(CatalogoActual){
+            case "DASHBOARD":
+                break;
+            case "CLIENTES":
+                ClienteActual = GetCliente(IdRegistro);
+                break;
+        }
+    }//GEN-LAST:event_jtTablaMouseClicked
+
     
     //CLIENTES
-    public void GuardaCliente(Cliente cliente) throws Exception{
+    public void GuardaCliente(Cliente cliente)
+    {
+        
+        try
+        {
             Class.forName("org.postgresql.Driver");
             Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
             java.sql.Statement sentencia = conexion.createStatement();
@@ -400,14 +545,46 @@ public class Inicio extends javax.swing.JFrame {
             GetAllData("informacion","cliente");
             modalAgregarCliente.dispose();
             conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+            
     }
-    
     public void EditaCliente(Cliente cliente){
         
     }
-    
     public void EliminaCliente(Cliente cliente){
         
+    }
+    public Cliente GetCliente(int idregistro){
+        
+        Cliente cliente = null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "cliente",idregistro};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE IdCliente = {2}", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                cliente = Cliente.GetCliente(result);
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return cliente;
     }
     
     
@@ -450,6 +627,8 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnDashboard;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnHistorialViajes;
     private javax.swing.JButton btnPedidos;
     private javax.swing.JButton btnRutas;

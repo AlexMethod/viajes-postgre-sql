@@ -43,18 +43,44 @@ public class Cliente {
     
     public static String[] GetRow(ResultSet result) throws Exception{
         
-        String IdCliente = result.getString("idcliente");
-        String RazonSocial = result.getString("razonsocial");
-        String NombreComercial = result.getString("nombrecomercial");
-        String Tipo = result.getString("tipo");
-        String Direccion = result.getString("direccion");
-        String PorcentajeVenta = result.getString("porcentajeventa");
-        String Estatus = result.getString("estatus");
+        try
+        {
+            String IdCliente = result.getString("idcliente");
+            String RazonSocial = result.getString("razonsocial");
+            String NombreComercial = result.getString("nombrecomercial");
+            String Tipo = result.getString("tipo");
+            String Direccion = result.getString("direccion");
+            String PorcentajeVenta = result.getString("porcentajeventa");
+            String Estatus = result.getString("estatus");
+            String row[] = {IdCliente,RazonSocial,NombreComercial,Tipo,Direccion,PorcentajeVenta,Estatus};
+            return row;
+        }
+        catch(Exception error){
+            String row[] = {};
+            return row;
+        }
         
-        String row[] = {IdCliente,RazonSocial,NombreComercial,Tipo,Direccion,PorcentajeVenta,Estatus};
         
-        return row;
+    }
+    
+    public static Cliente GetCliente(ResultSet result) throws Exception{
         
+        try
+        {
+            String IdCliente = result.getString("idcliente");
+            String RazonSocial = result.getString("razonsocial");
+            String NombreComercial = result.getString("nombrecomercial");
+            String Tipo = result.getString("tipo");
+            String Direccion = result.getString("direccion");
+            String PorcentajeVenta = result.getString("porcentajeventa");
+            String Estatus = result.getString("estatus");
+
+            Cliente cliente = new Cliente(Integer.parseInt(IdCliente),RazonSocial,NombreComercial,Tipo,Direccion,Double.valueOf(PorcentajeVenta),Estatus);
+            return cliente;
+        }
+        catch(Exception error){
+            return null;
+        }
     }
     
 }
