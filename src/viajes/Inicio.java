@@ -57,7 +57,7 @@ public class Inicio extends javax.swing.JFrame {
             java.sql.Statement sentencia = conexion.createStatement();
 
             Object[] params = new Object[]{esquema, tabla};
-            String sql = MessageFormat.format("SELECT * FROM {0}.{1}", params);
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''ACTIVO''", params);
             
             ResultSet result = sentencia.executeQuery(sql);
             DefaultTableModel model = (DefaultTableModel) jtTabla.getModel();
@@ -552,10 +552,46 @@ public class Inicio extends javax.swing.JFrame {
             
     }
     public void EditaCliente(Cliente cliente){
-        
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{ClienteActual.IdCliente,cliente.RazonSocial, cliente.NombreComercial,cliente.Tipo,cliente.Direccion,cliente.PorcentajeVenta};
+            String sql = 
+                    MessageFormat.format("UPDATE informacion.cliente SET razonsocial = ''{1}'',nombrecomercial = ''{2}'',tipo = ''{3}'',direccion = ''{4}'',porcentajeventa = {5} WHERE IdCliente = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","cliente");
+            modalAgregarCliente.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
     }
     public void EliminaCliente(Cliente cliente){
-        
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{ClienteActual.IdCliente};
+            String sql = 
+                    MessageFormat.format("UPDATE informacion.cliente SET estatus = ''CANCELADO'' WHERE IdCliente = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","cliente");
+            modalAgregarCliente.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
     }
     public Cliente GetCliente(int idregistro){
         
