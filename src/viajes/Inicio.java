@@ -17,9 +17,18 @@ public class Inicio extends javax.swing.JFrame {
     
     //Instancias de registros seleccionados
     Cliente ClienteActual = null;
+    Sucursal SucursalActual = null;
+    //Transportista TransportistaActual = null;
+    //Unidad UnidadActual = null;
+    //Ruta RutaActual = null;
     
     //Modales para los formularios
     AgregarCliente modalAgregarCliente = null;
+    AgregarSucursal modalAgregarSucursal = null;
+    //AgregarTransportista modalAgregarTransportista = null;
+    //AgregarUnidad modalAgregarUnidad = null;
+    //AgregarRuta modalAgregarRuta = null;
+    
     
     //Conexion con BD
     DefaultTableModel md;
@@ -70,6 +79,10 @@ public class Inicio extends javax.swing.JFrame {
                     md = new DefaultTableModel(data,Cliente.Header);
                     jtTabla.setModel(md);
                     break;
+                case "SUCURSALES":
+                    md = new DefaultTableModel(data,Sucursal.Header);
+                    jtTabla.setModel(md);
+                    break;
             }
 
             //Se itera sobre cada una de las tuplas para agregarlas a la tabla
@@ -80,6 +93,9 @@ public class Inicio extends javax.swing.JFrame {
                     case "CLIENTES":
                         //Se obtiene el conjunto de datos para una tupla
                         row = Cliente.GetRow(result);
+                        break;
+                    case "SUCURSALES":
+                        row = Sucursal.getRow(result);
                         break;
                 }
                 md.addRow(row);
@@ -374,6 +390,7 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         CatalogoActual = "SUCURSALES";
         txtTitle.setText(CatalogoActual);
+        GetAllData("informacion","sucursal");
         
         //Configuración de botones
         btnAgregar.setVisible(true);
@@ -478,15 +495,20 @@ public class Inicio extends javax.swing.JFrame {
         jtTabla.setVisible(false);
     }//GEN-LAST:event_btnDashboardActionPerformed
 
+    //AGREGAR
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
         switch(CatalogoActual){
             case "CLIENTES":
                 modalAgregarCliente = new AgregarCliente(this);
                 break;
+            case "SUCURSALES":
+                modalAgregarSucursal = new AgregarSucursal(this);
+                break;
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    //ELIMINAR
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
         switch(CatalogoActual){
@@ -496,9 +518,16 @@ public class Inicio extends javax.swing.JFrame {
                     modalAgregarCliente.setVisible(ClienteActual,"ELIMINAR");
                 } 
                 break;
+            case "SUCURSALES":
+                if(SucursalActual != null){
+                    modalAgregarSucursal = new AgregarSucursal(this);
+                    modalAgregarSucursal.setVisible(SucursalActual,"ELIMINAR");
+                } 
+                break;
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    //EDITAR
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
         switch(CatalogoActual){
@@ -507,6 +536,12 @@ public class Inicio extends javax.swing.JFrame {
                     modalAgregarCliente = new AgregarCliente(this);
                     modalAgregarCliente.setVisible(ClienteActual,"EDITAR");
                 } 
+                break;
+            case "SUCURSALES":
+                if(SucursalActual != null){
+                    modalAgregarSucursal = new AgregarSucursal(this);
+                    modalAgregarSucursal.setVisible(SucursalActual,"EDITAR");
+                }
                 break;
         }
     }//GEN-LAST:event_btnEditarActionPerformed
@@ -526,6 +561,9 @@ public class Inicio extends javax.swing.JFrame {
                 break;
             case "CLIENTES":
                 ClienteActual = GetCliente(IdRegistro);
+                break;
+            case "SUCURSALES":
+                SucursalActual = GetSucursal(IdRegistro);
                 break;
         }
     }//GEN-LAST:event_jtTablaMouseClicked
@@ -625,6 +663,102 @@ public class Inicio extends javax.swing.JFrame {
         }
         
         return cliente;
+    }
+    
+    //SUCURSALES
+    public void GuardaSucursal(Sucursal sucursal)
+    {
+        
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+            Object[] params = new Object[]{sucursal.Nombre,sucursal.Direccion,sucursal.Estatus};
+            String sql = 
+                    MessageFormat.format("INSERT INTO informacion.sucursal(nombre,direccion,estatus) VALUES(''{0}'',''{1}'',''{2}'')", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","sucursal");
+            modalAgregarSucursal.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+            
+    }
+    public void EditaSucursal(Sucursal sucursal){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{SucursalActual.IdSucursal,sucursal.Nombre,sucursal.Direccion};
+            String sql = 
+                    MessageFormat.format("UPDATE informacion.sucursal SET nombre = ''{1}'',direccion = ''{2}'' WHERE IdSucursal = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","sucursal");
+            modalAgregarSucursal.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void EliminaSucursal(Sucursal sucursal){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{SucursalActual.IdSucursal};
+            String sql = 
+                    MessageFormat.format("UPDATE informacion.sucursal SET estatus = ''CANCELADO'' WHERE IdSucursal = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","sucursal");
+            modalAgregarSucursal.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public Sucursal GetSucursal(int idregistro){
+        
+        Sucursal sucursal = null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "sucursal",idregistro};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE IdSucursal = {2}", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                sucursal = Sucursal.GetSucursal(result);
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return sucursal;
     }
     
     

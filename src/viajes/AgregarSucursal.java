@@ -35,24 +35,21 @@ public class AgregarSucursal extends javax.swing.JFrame {
         
     }
     
-    public void setVisible(Cliente cliente,String accion){
+    public void setVisible(Sucursal sucursal,String accion){
         Accion = accion;
         if(Accion == "EDITAR"){
-            txtNombre.setText(cliente.RazonSocial);
-            txtDireccion.setText(cliente.NombreComercial);
-            txtDireccion.setText(cliente.Direccion);
+            txtNombre.setText(sucursal.Nombre);
+            txtDireccion.setText(sucursal.Direccion);
             btnGuardar.setText("Editar");
             setVisible(true);
         } 
         else if(Accion == "ELIMINAR"){
-            txtNombre.setText(cliente.RazonSocial);
-            txtDireccion.setText(cliente.NombreComercial);
-            txtDireccion.setText(cliente.Direccion);
+            txtNombre.setText(sucursal.Nombre);
+            txtDireccion.setText(sucursal.Direccion);
             btnGuardar.setText("Eliminar");
             setVisible(true);
             
             txtNombre.setEnabled(false);
-            txtDireccion.setEnabled(false);
             txtDireccion.setEnabled(false);
             btnGuardar.setText("Eliminar");
         }
@@ -155,20 +152,19 @@ public class AgregarSucursal extends javax.swing.JFrame {
         
         try
         {
-            String razonSocial = txtNombre.getText();
-            String nombreComercial = txtDireccion.getText();
+            String nombre = txtNombre.getText();
             String direccion = txtDireccion.getText();
             String estatus = "ACTIVO";
-            //Cliente cliente = new Cliente(razonSocial,nombreComercial,tipo,direccion,porcentajeVenta,estatus);
+            Sucursal sucursal = new Sucursal(nombre,direccion,estatus);
 
             if(Accion == "ALTA"){
-                //FormInicio.GuardaCliente(cliente);
+                FormInicio.GuardaSucursal(sucursal);
             }
             else if(Accion == "EDITAR"){
-                //FormInicio.EditaCliente(cliente);
+                FormInicio.EditaSucursal(sucursal);
             }
             else if(Accion == "ELIMINAR"){
-                //FormInicio.EliminaCliente(cliente);
+                FormInicio.EliminaSucursal(sucursal);
             }
         }
         catch(Exception error){
