@@ -491,8 +491,10 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         switch(CatalogoActual){
             case "CLIENTES":
-                modalAgregarCliente = new AgregarCliente(this);
-                if(ClienteActual != null) modalAgregarCliente.setVisible(ClienteActual,"ELIMINAR");
+                if(ClienteActual != null){
+                    modalAgregarCliente = new AgregarCliente(this);
+                    modalAgregarCliente.setVisible(ClienteActual,"ELIMINAR");
+                } 
                 break;
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -501,8 +503,10 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         switch(CatalogoActual){
             case "CLIENTES":
-                modalAgregarCliente = new AgregarCliente(this);
-                if(ClienteActual != null) modalAgregarCliente.setVisible(ClienteActual,"EDITAR");
+                if(ClienteActual != null){
+                    modalAgregarCliente = new AgregarCliente(this);
+                    modalAgregarCliente.setVisible(ClienteActual,"EDITAR");
+                } 
                 break;
         }
     }//GEN-LAST:event_btnEditarActionPerformed
