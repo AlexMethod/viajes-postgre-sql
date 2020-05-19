@@ -419,7 +419,7 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         CatalogoActual = "UNIDADES";
         txtTitle.setText(CatalogoActual);
-        GetAllData("informacion","unidad");
+        GetAllData("informacion","view_unidad");
         
         //Configuración de botones
         btnAgregar.setVisible(true);
@@ -957,7 +957,7 @@ public class Inicio extends javax.swing.JFrame {
             
             sentencia.execute(sql);
             //Imprime los resultados de la tabla
-            GetAllData("informacion","unidad");
+            GetAllData("informacion","view_unidad");
             modalAgregarUnidad.dispose();
             conexion.close();
         }
@@ -979,7 +979,7 @@ public class Inicio extends javax.swing.JFrame {
             
             sentencia.execute(sql);
             //Imprime los resultados de la tabla
-            GetAllData("informacion","unidad");
+            GetAllData("informacion","view_unidad");
             modalAgregarUnidad.dispose();
             conexion.close();
         }
@@ -1000,7 +1000,7 @@ public class Inicio extends javax.swing.JFrame {
             
             sentencia.execute(sql);
             //Imprime los resultados de la tabla
-            GetAllData("informacion","unidad");
+            GetAllData("informacion","view_unidad");
             modalAgregarUnidad.dispose();
             conexion.close();
         }

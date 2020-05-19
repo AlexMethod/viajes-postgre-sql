@@ -46,7 +46,7 @@ public class Unidad {
         try
         {
             String IdUnidad = result.getString("idunidad");
-            String Transportista = result.getString("idtransportista");
+            String Transportista = result.getString("transportista");
             String Nombre = result.getString("nombre");
             String Placas = result.getString("placas");
             String PesoMaximo = result.getString("pesomaximo");
