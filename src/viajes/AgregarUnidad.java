@@ -5,6 +5,8 @@
  */
 package viajes;
 
+import java.awt.List;
+import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -32,60 +34,64 @@ public class AgregarUnidad extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         Accion = "ALTA";
-        loadCboTipo(null);
+        loadCboTransportistas(null);
         
     }
     
-    public void loadCboTipo(ComboboxItem defItem){
-        cboTipo.removeAllItems();
+    public void loadCboTransportistas(ComboboxItem defItem){
+        cboTransportista.removeAllItems();
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        model.addElement(new ComboboxItem("FISCAL",1));
-        model.addElement(new ComboboxItem("ORIGEN",2));
-        model.addElement(new ComboboxItem("DESTINO",3));
-        cboTipo.setModel(model);
+        ArrayList<Transportista> transportistas = FormInicio.GetTransportistas();
+        
+        for(int i = 0; i < transportistas.size(); i++){
+            Transportista t = transportistas.get(i);
+            model.addElement(new ComboboxItem(t.NombreComercial,t.IdTransportista));
+        }
+        cboTransportista.setModel(model);
         if(defItem != null){
-            cboTipo.setSelectedItem(defItem);
+            cboTransportista.setSelectedItem(defItem);
         }
     }
     
-    public int getIndexOfItem(String value){
+    public int getIndexOfItem(int value){
         int index = 0;
-        DefaultComboBoxModel model = (DefaultComboBoxModel)cboTipo.getModel();
+        DefaultComboBoxModel model = (DefaultComboBoxModel)cboTransportista.getModel();
         for(int i = 0; i < model.getSize(); i++){
             ComboboxItem item = (ComboboxItem)model.getElementAt(i);
             String textItem = item.getText();
-            if(textItem.equals(value)){
+            int valueItem = item.getValue();
+            if(valueItem == value){
                  index =  i;
             }
         }
         return index;
     }
     
-    public void setVisible(Cliente cliente,String accion){
+    public void setVisible(Unidad unidad,String accion){
         Accion = accion;
         if(Accion == "EDITAR"){
-            txtRazonSocial.setText(cliente.RazonSocial);
-            txtNombreComercial.setText(cliente.NombreComercial);
-            cboTipo.setSelectedIndex(getIndexOfItem(cliente.Tipo));
-            txtPorcentajeVenta.setText(cliente.PorcentajeVenta + "");
-            txtDireccion.setText(cliente.Direccion);
+            txtNombre.setText(unidad.Nombre);
+            txtPlacas.setText(unidad.Placas);
+            cboTransportista.setSelectedIndex(getIndexOfItem(unidad.IdTransportista));
+            txtPesoMaximo.setText(unidad.PesoMaximo + "");
+            txtCostoxKilometro.setText(unidad.CostoxKilometro + "");
             btnGuardar.setText("Editar");
             setVisible(true);
         } 
         else if(Accion == "ELIMINAR"){
-            txtRazonSocial.setText(cliente.RazonSocial);
-            txtNombreComercial.setText(cliente.NombreComercial);
-            cboTipo.setSelectedIndex(getIndexOfItem(cliente.Tipo));
-            txtPorcentajeVenta.setText(cliente.PorcentajeVenta + "");
-            txtDireccion.setText(cliente.Direccion);
+            txtNombre.setText(unidad.Nombre);
+            txtPlacas.setText(unidad.Placas);
+            cboTransportista.setSelectedIndex(getIndexOfItem(unidad.IdTransportista));
+            txtPesoMaximo.setText(unidad.PesoMaximo + "");
+            txtCostoxKilometro.setText(unidad.CostoxKilometro + "");
             btnGuardar.setText("Eliminar");
             setVisible(true);
             
-            txtRazonSocial.setEnabled(false);
-            txtNombreComercial.setEnabled(false);
-            cboTipo.setEnabled(false);
-            txtPorcentajeVenta.setEnabled(false);
-            txtDireccion.setEnabled(false);
+            txtNombre.setEnabled(false);
+            txtPlacas.setEnabled(false);
+            cboTransportista.setEnabled(false);
+            txtPesoMaximo.setEnabled(false);
+            txtCostoxKilometro.setEnabled(false);
             btnGuardar.setText("Eliminar");
         }
     }
@@ -99,43 +105,43 @@ public class AgregarUnidad extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        label1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtNombreComercial = new javax.swing.JTextField();
-        txtRazonSocial = new javax.swing.JTextField();
+        txtPlacas = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtDireccion = new javax.swing.JTextField();
+        txtCostoxKilometro = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        cboTipo = new javax.swing.JComboBox<>();
+        cboTransportista = new javax.swing.JComboBox<>();
         btnCerrar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        txtPorcentajeVenta = new javax.swing.JTextField();
+        txtPesoMaximo = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 51, 51));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jLabel1.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
-        jLabel1.setText("Razón Social");
+        label1.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
+        label1.setText("Nombre");
 
         jLabel2.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
-        jLabel2.setText("Nombre Comercial");
+        jLabel2.setText("Placas");
 
-        txtNombreComercial.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
+        txtPlacas.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
 
-        txtRazonSocial.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
+        txtNombre.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
-        jLabel3.setText("Tipo");
+        jLabel3.setText("Transportista");
 
-        txtDireccion.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
+        txtCostoxKilometro.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
-        jLabel4.setText("Porcentaje venta");
+        jLabel4.setText("Peso máximo");
 
-        cboTipo.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
-        cboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboTransportista.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
+        cboTransportista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnCerrar.setBackground(new java.awt.Color(204, 204, 255));
         btnCerrar.setText("Cerrar");
@@ -154,9 +160,9 @@ public class AgregarUnidad extends javax.swing.JFrame {
         });
 
         jLabel5.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
-        jLabel5.setText("Dirección");
+        jLabel5.setText("Costo Kilometro");
 
-        txtPorcentajeVenta.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
+        txtPesoMaximo.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -165,34 +171,37 @@ public class AgregarUnidad extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtDireccion)
-                    .addComponent(jLabel3)
+                    .addComponent(txtCostoxKilometro)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(cboTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cboTransportista, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(60, 60, 60))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel1)
-                            .addComponent(txtRazonSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(38, 38, 38)
                                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(28, 28, 28)))
+                        .addGap(35, 35, 35))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(label1)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtNombreComercial)
-                        .addComponent(jLabel2))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(txtPorcentajeVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(1, 1, 1))
+                        .addComponent(jLabel4)
+                        .addGap(66, 66, 66))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtPesoMaximo, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtPlacas))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,26 +209,27 @@ public class AgregarUnidad extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtRazonSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(label1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cboTransportista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCostoxKilometro, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(90, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNombreComercial, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPlacas, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPorcentajeVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -240,23 +250,23 @@ public class AgregarUnidad extends javax.swing.JFrame {
         
         try
         {
-            String razonSocial = txtRazonSocial.getText();
-            String nombreComercial = txtNombreComercial.getText();
-            Object item = cboTipo.getSelectedItem();
-            String tipo = ((ComboboxItem)item).getText();
-            String direccion = txtDireccion.getText();
-            double porcentajeVenta = Double.parseDouble(txtPorcentajeVenta.getText());
+            String nombre = txtNombre.getText();
+            String placas = txtPlacas.getText();
+            Object item = cboTransportista.getSelectedItem();
+            int idtransportista = ((ComboboxItem)item).getValue();
+            double costoxkilometro = Double.parseDouble(txtCostoxKilometro.getText());
+            double pesoMaximo = Double.parseDouble(txtPesoMaximo.getText());
             String estatus = "ACTIVO";
-            Cliente cliente = new Cliente(razonSocial,nombreComercial,tipo,direccion,porcentajeVenta,estatus);
+            Unidad unidad = new Unidad(idtransportista,nombre,placas,pesoMaximo,costoxkilometro,estatus);
 
             if(Accion == "ALTA"){
-                FormInicio.GuardaCliente(cliente);
+                FormInicio.GuardaUnidad(unidad);
             }
             else if(Accion == "EDITAR"){
-                FormInicio.EditaCliente(cliente);
+                FormInicio.EditaUnidad(unidad);
             }
             else if(Accion == "ELIMINAR"){
-                FormInicio.EliminaCliente(cliente);
+                FormInicio.EliminaUnidad(unidad);
             }
         }
         catch(Exception error){
@@ -305,15 +315,15 @@ public class AgregarUnidad extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JComboBox<String> cboTipo;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JComboBox<String> cboTransportista;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField txtDireccion;
-    private javax.swing.JTextField txtNombreComercial;
-    private javax.swing.JTextField txtPorcentajeVenta;
-    private javax.swing.JTextField txtRazonSocial;
+    private javax.swing.JLabel label1;
+    private javax.swing.JTextField txtCostoxKilometro;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtPesoMaximo;
+    private javax.swing.JTextField txtPlacas;
     // End of variables declaration//GEN-END:variables
 }

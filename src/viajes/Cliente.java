@@ -63,7 +63,7 @@ public class Cliente {
         
     }
     
-    public static Cliente GetCliente(ResultSet result) throws Exception{
+    public static Cliente GetInstance(ResultSet result) throws Exception{
         
         try
         {

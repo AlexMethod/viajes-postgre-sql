@@ -5,9 +5,11 @@
  */
 package viajes;
 
+import java.awt.List;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 /**
  *
@@ -19,7 +21,7 @@ public class Inicio extends javax.swing.JFrame {
     Cliente ClienteActual = null;
     Sucursal SucursalActual = null;
     Transportista TransportistaActual = null;
-    //Unidad UnidadActual = null;
+    Unidad UnidadActual = null;
     //Ruta RutaActual = null;
     
     //Modales para los formularios
@@ -87,6 +89,10 @@ public class Inicio extends javax.swing.JFrame {
                     md = new DefaultTableModel(data,Transportista.Header);
                     jtTabla.setModel(md);
                     break;
+                case "UNIDADES":
+                    md = new DefaultTableModel(data,Unidad.Header);
+                    jtTabla.setModel(md);
+                    break;
             }
 
             //Se itera sobre cada una de las tuplas para agregarlas a la tabla
@@ -103,6 +109,9 @@ public class Inicio extends javax.swing.JFrame {
                         break;
                     case "TRANSPORTISTAS":
                         row = Transportista.GetRow(result);
+                        break;
+                    case "UNIDADES":
+                        row = Unidad.GetRow(result);
                         break;
                 }
                 md.addRow(row);
@@ -517,6 +526,9 @@ public class Inicio extends javax.swing.JFrame {
             case "TRANSPORTISTAS":
                 modalAgregarTransportista = new AgregarTransportista(this);
                 break;
+            case "UNIDADES":
+                modalAgregarUnidad = new AgregarUnidad(this);
+                break;
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -540,6 +552,12 @@ public class Inicio extends javax.swing.JFrame {
                 if(TransportistaActual != null){
                     modalAgregarTransportista = new AgregarTransportista(this);
                     modalAgregarTransportista.setVisible(TransportistaActual,"ELIMINAR");
+                } 
+                break;
+            case "UNIDADES":
+                if(UnidadActual != null){
+                    modalAgregarUnidad = new AgregarUnidad(this);
+                    modalAgregarUnidad.setVisible(UnidadActual,"ELIMINAR");
                 } 
                 break;
         }
@@ -567,6 +585,12 @@ public class Inicio extends javax.swing.JFrame {
                     modalAgregarTransportista.setVisible(TransportistaActual,"EDITAR");
                 } 
                 break;
+            case "UNIDADES":
+                if(UnidadActual != null){
+                    modalAgregarUnidad = new AgregarUnidad(this);
+                    modalAgregarUnidad.setVisible(UnidadActual,"EDITAR");
+                } 
+                break;
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -591,6 +615,9 @@ public class Inicio extends javax.swing.JFrame {
                 break;
             case "TRANSPORTISTAS":
                 TransportistaActual = GetTransportista(IdRegistro);
+                break;
+            case "UNIDADES":
+                UnidadActual = GetUnidad(IdRegistro);
                 break;
         }
     }//GEN-LAST:event_jtTablaMouseClicked
@@ -678,7 +705,7 @@ public class Inicio extends javax.swing.JFrame {
             //Se itera sobre la tupla encontrada si es que existe
             while(result.next())
             {
-                cliente = Cliente.GetCliente(result);
+                cliente = Cliente.GetInstance(result);
             }
             
             result.close();
@@ -774,7 +801,7 @@ public class Inicio extends javax.swing.JFrame {
             //Se itera sobre la tupla encontrada si es que existe
             while(result.next())
             {
-                sucursal = Sucursal.GetSucursal(result);
+                sucursal = Sucursal.GetInstance(result);
             }
             
             result.close();
@@ -871,7 +898,7 @@ public class Inicio extends javax.swing.JFrame {
             //Se itera sobre la tupla encontrada si es que existe
             while(result.next())
             {
-                transportista = Transportista.GetTransportista(result);
+                transportista = Transportista.GetInstance(result);
             }
             
             result.close();
@@ -884,6 +911,133 @@ public class Inicio extends javax.swing.JFrame {
         
         return transportista;
     }
+    public ArrayList<Transportista> GetTransportistas(){
+        
+        ArrayList<Transportista> transportistas = new ArrayList<Transportista>();
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "transportista","ACTIVO"};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''{2}''", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                transportistas.add(Transportista.GetInstance(result));
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return transportistas;
+    }
+    
+    
+    //UNIDADES
+    public void GuardaUnidad(Unidad unidad)
+    {
+        
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+            Object[] params = new Object[]{unidad.IdTransportista,unidad.Nombre, unidad.Placas,unidad.PesoMaximo,unidad.CostoxKilometro,unidad.Estatus};
+            String sql = 
+                    MessageFormat.format("INSERT INTO informacion.unidad(idtransportista,nombre,placas,pesomaximo,costoxkilometro,estatus) VALUES({0},''{1}'',''{2}'',{3},{4},''{5}'')", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","unidad");
+            modalAgregarUnidad.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+            
+    }
+    public void EditaUnidad(Unidad unidad){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{UnidadActual.IdUnidad,unidad.IdTransportista,unidad.Nombre,unidad.Placas,unidad.PesoMaximo,unidad.CostoxKilometro};
+            String sql = 
+                    MessageFormat.format("UPDATE informacion.unidad SET idtransportista = {1},nombre = ''{2}'',placas = ''{3}'',pesomaximo = {4},costoxkilometro = {5} WHERE IdUnidad = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","unidad");
+            modalAgregarUnidad.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void EliminaUnidad(Unidad unidad){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{UnidadActual.IdUnidad};
+            String sql = 
+                    MessageFormat.format("UPDATE informacion.unidad SET estatus = ''CANCELADO'' WHERE IdUnidad = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","unidad");
+            modalAgregarUnidad.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public Unidad GetUnidad(int idregistro){
+        
+        Unidad unidad = null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "unidad",idregistro};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE IdUnidad = {2}", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                unidad = Unidad.GetInstance(result);
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return unidad;
+    }
+    
     /**
      * @param args the command line arguments
      */

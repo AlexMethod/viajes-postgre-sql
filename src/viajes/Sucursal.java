@@ -45,7 +45,7 @@ public class Sucursal {
         }
     }
     
-    public static Sucursal GetSucursal(ResultSet result) throws Exception{
+    public static Sucursal GetInstance(ResultSet result) throws Exception{
         try
         {
             String IdSucursal = result.getString("idsucursal");

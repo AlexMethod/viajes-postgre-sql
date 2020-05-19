@@ -55,7 +55,7 @@ public class Transportista {
         
     }
     
-    public static Transportista GetTransportista(ResultSet result) throws Exception{
+    public static Transportista GetInstance(ResultSet result) throws Exception{
         
         try
         {
