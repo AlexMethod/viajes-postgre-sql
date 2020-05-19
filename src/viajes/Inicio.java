@@ -18,15 +18,15 @@ public class Inicio extends javax.swing.JFrame {
     //Instancias de registros seleccionados
     Cliente ClienteActual = null;
     Sucursal SucursalActual = null;
-    //Transportista TransportistaActual = null;
+    Transportista TransportistaActual = null;
     //Unidad UnidadActual = null;
     //Ruta RutaActual = null;
     
     //Modales para los formularios
     AgregarCliente modalAgregarCliente = null;
     AgregarSucursal modalAgregarSucursal = null;
-    //AgregarTransportista modalAgregarTransportista = null;
-    //AgregarUnidad modalAgregarUnidad = null;
+    AgregarTransportista modalAgregarTransportista = null;
+    AgregarUnidad modalAgregarUnidad = null;
     //AgregarRuta modalAgregarRuta = null;
     
     
@@ -83,6 +83,10 @@ public class Inicio extends javax.swing.JFrame {
                     md = new DefaultTableModel(data,Sucursal.Header);
                     jtTabla.setModel(md);
                     break;
+                case "TRANSPORTISTAS":
+                    md = new DefaultTableModel(data,Transportista.Header);
+                    jtTabla.setModel(md);
+                    break;
             }
 
             //Se itera sobre cada una de las tuplas para agregarlas a la tabla
@@ -95,7 +99,10 @@ public class Inicio extends javax.swing.JFrame {
                         row = Cliente.GetRow(result);
                         break;
                     case "SUCURSALES":
-                        row = Sucursal.getRow(result);
+                        row = Sucursal.GetRow(result);
+                        break;
+                    case "TRANSPORTISTAS":
+                        row = Transportista.GetRow(result);
                         break;
                 }
                 md.addRow(row);
@@ -403,6 +410,7 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         CatalogoActual = "UNIDADES";
         txtTitle.setText(CatalogoActual);
+        GetAllData("informacion","unidad");
         
         //Configuración de botones
         btnAgregar.setVisible(true);
@@ -415,6 +423,7 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         CatalogoActual = "TRANSPORTISTAS";
         txtTitle.setText(CatalogoActual);
+        GetAllData("informacion","transportista");
         
         //Configuración de botones
         btnAgregar.setVisible(true);
@@ -505,6 +514,9 @@ public class Inicio extends javax.swing.JFrame {
             case "SUCURSALES":
                 modalAgregarSucursal = new AgregarSucursal(this);
                 break;
+            case "TRANSPORTISTAS":
+                modalAgregarTransportista = new AgregarTransportista(this);
+                break;
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -522,6 +534,12 @@ public class Inicio extends javax.swing.JFrame {
                 if(SucursalActual != null){
                     modalAgregarSucursal = new AgregarSucursal(this);
                     modalAgregarSucursal.setVisible(SucursalActual,"ELIMINAR");
+                } 
+                break;
+            case "TRANSPORTISTAS":
+                if(TransportistaActual != null){
+                    modalAgregarTransportista = new AgregarTransportista(this);
+                    modalAgregarTransportista.setVisible(TransportistaActual,"ELIMINAR");
                 } 
                 break;
         }
@@ -542,6 +560,12 @@ public class Inicio extends javax.swing.JFrame {
                     modalAgregarSucursal = new AgregarSucursal(this);
                     modalAgregarSucursal.setVisible(SucursalActual,"EDITAR");
                 }
+                break;
+            case "TRANSPORTISTAS":
+                if(TransportistaActual != null){
+                    modalAgregarTransportista = new AgregarTransportista(this);
+                    modalAgregarTransportista.setVisible(TransportistaActual,"EDITAR");
+                } 
                 break;
         }
     }//GEN-LAST:event_btnEditarActionPerformed
@@ -564,6 +588,9 @@ public class Inicio extends javax.swing.JFrame {
                 break;
             case "SUCURSALES":
                 SucursalActual = GetSucursal(IdRegistro);
+                break;
+            case "TRANSPORTISTAS":
+                TransportistaActual = GetTransportista(IdRegistro);
                 break;
         }
     }//GEN-LAST:event_jtTablaMouseClicked
@@ -762,6 +789,101 @@ public class Inicio extends javax.swing.JFrame {
     }
     
     
+    //TRANSPORTISTAS
+    public void GuardaTransportista(Transportista transportista)
+    {
+        
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+            Object[] params = new Object[]{transportista.RazonSocial, transportista.NombreComercial,transportista.Comision,transportista.Estatus};
+            String sql = 
+                    MessageFormat.format("INSERT INTO informacion.transportista(razonsocial,nombrecomercial,comision,estatus) VALUES(''{0}'',''{1}'',{2},''{3}'')", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","transportista");
+            modalAgregarTransportista.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+            
+    }
+    public void EditaTransportista(Transportista transportista){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{TransportistaActual.IdTransportista,transportista.RazonSocial, transportista.NombreComercial,transportista.Comision};
+            String sql = 
+                    MessageFormat.format("UPDATE informacion.transportista SET razonsocial = ''{1}'',nombrecomercial = ''{2}'',Comision = {3} WHERE IdTransportista = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","transportista");
+            modalAgregarTransportista.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void EliminaTransportista(Transportista transportista){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{TransportistaActual.IdTransportista};
+            String sql = 
+                    MessageFormat.format("UPDATE informacion.transportista SET estatus = ''CANCELADO'' WHERE IdTransportista = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","transportista");
+            modalAgregarTransportista.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public Transportista GetTransportista(int idregistro){
+        
+        Transportista transportista = null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "transportista",idregistro};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE IdTransportista = {2}", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                transportista = Transportista.GetTransportista(result);
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return transportista;
+    }
     /**
      * @param args the command line arguments
      */

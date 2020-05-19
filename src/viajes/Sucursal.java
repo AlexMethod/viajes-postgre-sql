@@ -29,7 +29,7 @@ public class Sucursal {
         Estatus = estatus;
     }
     
-    public static String[] getRow(ResultSet result) throws Exception{
+    public static String[] GetRow(ResultSet result) throws Exception{
         try
         {
             String IdSucursal = result.getString("idsucursal");
