@@ -22,14 +22,14 @@ public class Inicio extends javax.swing.JFrame {
     Sucursal SucursalActual = null;
     Transportista TransportistaActual = null;
     Unidad UnidadActual = null;
-    //Ruta RutaActual = null;
+    Ruta RutaActual = null;
     
     //Modales para los formularios
     AgregarCliente modalAgregarCliente = null;
     AgregarSucursal modalAgregarSucursal = null;
     AgregarTransportista modalAgregarTransportista = null;
     AgregarUnidad modalAgregarUnidad = null;
-    //AgregarRuta modalAgregarRuta = null;
+    AgregarRuta modalAgregarRuta = null;
     
     
     //Conexion con BD
@@ -624,8 +624,7 @@ public class Inicio extends javax.swing.JFrame {
 
     
     //CLIENTES
-    public void GuardaCliente(Cliente cliente)
-    {
+    public void GuardaCliente(Cliente cliente){
         
         try
         {
@@ -718,10 +717,96 @@ public class Inicio extends javax.swing.JFrame {
         
         return cliente;
     }
+    public ArrayList<Cliente> GetClientesFiscales(){
+        
+        ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "cliente","ACTIVO","FISCAL"};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''{2}'' AND Tipo = ''{3}''", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                clientes.add(Cliente.GetInstance(result));
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return clientes;
+    }
+    public ArrayList<Cliente> GetClientesOrigen(){
+        
+        ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "cliente","ACTIVO","ORIGEN"};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''{2}'' AND Tipo = ''{3}''", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                clientes.add(Cliente.GetInstance(result));
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return clientes;
+    }
+    public ArrayList<Cliente> GetClientesDestino(){
+        
+        ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "cliente","ACTIVO","DESTINO"};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''{2}'' AND Tipo = ''{3}''", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                clientes.add(Cliente.GetInstance(result));
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return clientes;
+    }
     
     //SUCURSALES
-    public void GuardaSucursal(Sucursal sucursal)
-    {
+    public void GuardaSucursal(Sucursal sucursal){
         
         try
         {
@@ -814,11 +899,38 @@ public class Inicio extends javax.swing.JFrame {
         
         return sucursal;
     }
-    
+    public ArrayList<Sucursal> GetSucursales(){
+        
+        ArrayList<Sucursal> sucursales = new ArrayList<Sucursal>();
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "sucursal","ACTIVO"};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''{2}''", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                sucursales.add(Sucursal.GetInstance(result));
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return sucursales;
+    }
     
     //TRANSPORTISTAS
-    public void GuardaTransportista(Transportista transportista)
-    {
+    public void GuardaTransportista(Transportista transportista){
         
         try
         {
@@ -943,8 +1055,7 @@ public class Inicio extends javax.swing.JFrame {
     
     
     //UNIDADES
-    public void GuardaUnidad(Unidad unidad)
-    {
+    public void GuardaUnidad(Unidad unidad){
         
         try
         {
@@ -1036,6 +1147,131 @@ public class Inicio extends javax.swing.JFrame {
         }
         
         return unidad;
+    }
+    
+    
+    //SUCURSALES
+    public void GuardaRuta(Ruta ruta){
+        
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+            Object[] params = new Object[]{ruta.EstadoOrigen,ruta.EstadoDestino,ruta.CPOrigen,ruta.CPDestino,ruta.Estatus};
+            String sql = 
+                    MessageFormat.format("INSERT INTO informacion.ruta(EstadoOrigen,EstadoDestino,CPOrigen,CPDestino,estatus) VALUES(''{0}'',''{1}'',{2},{3}, ''{4}'')", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","ruta");
+            modalAgregarRuta.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+            
+    }
+    public void EditaRuta(Ruta ruta){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{RutaActual.IdRuta,ruta.EstadoOrigen,ruta.EstadoDestino,ruta.CPOrigen,ruta.CPDestino};
+            String sql = 
+                    MessageFormat.format("UPDATE informacion.ruta SET EstadoOrigen = ''{1}'',EstadoDestino = ''{2}'', CPOrigen = {3},CPDestino = {4}  WHERE IdRuta = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","ruta");
+            modalAgregarRuta.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void EliminaRuta(Ruta ruta){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{SucursalActual.IdSucursal};
+            String sql = 
+                    MessageFormat.format("UPDATE informacion.ruta SET estatus = ''CANCELADO'' WHERE IdRuta = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("informacion","ruta");
+            modalAgregarRuta.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public Ruta GetRuta(int idregistro){
+        
+        Ruta ruta = null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "ruta",idregistro};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE IdRuta = {2}", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                ruta = Ruta.GetInstance(result);
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return ruta;
+    }
+    public ArrayList<Ruta> GetRutas(){
+        
+        ArrayList<Ruta> rutas = new ArrayList<Ruta>();
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "ruta","ACTIVO"};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''{2}''", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                rutas.add(Ruta.GetInstance(result));
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return rutas;
     }
     
     /**
