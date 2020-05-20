@@ -23,6 +23,9 @@ public class Inicio extends javax.swing.JFrame {
     Transportista TransportistaActual = null;
     Unidad UnidadActual = null;
     Ruta RutaActual = null;
+//    Tarifa TarifaActual = null;
+//    Pedido PedidoActual = null;
+//    Viaje ViajeActual = null;
     
     //Modales para los formularios
     AgregarCliente modalAgregarCliente = null;
@@ -30,6 +33,9 @@ public class Inicio extends javax.swing.JFrame {
     AgregarTransportista modalAgregarTransportista = null;
     AgregarUnidad modalAgregarUnidad = null;
     AgregarRuta modalAgregarRuta = null;
+//    AgregarTarifa modalAgregarTarifa = null;
+//    AgregarPedido modalAgregarPedido = null;
+//    AgregarViaje modalAgregarViaje = null;
     
     
     //Conexion con BD
@@ -93,6 +99,10 @@ public class Inicio extends javax.swing.JFrame {
                     md = new DefaultTableModel(data,Unidad.Header);
                     jtTabla.setModel(md);
                     break;
+                case "RUTAS":
+                    md = new DefaultTableModel(data,Ruta.Header);
+                    jtTabla.setModel(md);
+                    break;
             }
 
             //Se itera sobre cada una de las tuplas para agregarlas a la tabla
@@ -112,6 +122,9 @@ public class Inicio extends javax.swing.JFrame {
                         break;
                     case "UNIDADES":
                         row = Unidad.GetRow(result);
+                        break;
+                    case "RUTAS":
+                        row = Ruta.GetRow(result);
                         break;
                 }
                 md.addRow(row);
@@ -445,6 +458,7 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         CatalogoActual = "RUTAS";
         txtTitle.setText(CatalogoActual);
+        GetAllData("informacion","ruta");
         
         //Configuración de botones
         btnAgregar.setVisible(true);
@@ -529,6 +543,9 @@ public class Inicio extends javax.swing.JFrame {
             case "UNIDADES":
                 modalAgregarUnidad = new AgregarUnidad(this);
                 break;
+            case "RUTAS":
+                modalAgregarRuta = new AgregarRuta(this);
+                break;
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -558,6 +575,12 @@ public class Inicio extends javax.swing.JFrame {
                 if(UnidadActual != null){
                     modalAgregarUnidad = new AgregarUnidad(this);
                     modalAgregarUnidad.setVisible(UnidadActual,"ELIMINAR");
+                } 
+                break;
+            case "RUTAS":
+                if(RutaActual != null){
+                    modalAgregarRuta = new AgregarRuta(this);
+                    modalAgregarRuta.setVisible(RutaActual,"ELIMINAR");
                 } 
                 break;
         }
@@ -591,6 +614,12 @@ public class Inicio extends javax.swing.JFrame {
                     modalAgregarUnidad.setVisible(UnidadActual,"EDITAR");
                 } 
                 break;
+            case "RUTAS":
+                if(RutaActual != null){
+                    modalAgregarRuta = new AgregarRuta(this);
+                    modalAgregarRuta.setVisible(RutaActual,"EDITAR");
+                } 
+                break;
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -618,6 +647,9 @@ public class Inicio extends javax.swing.JFrame {
                 break;
             case "UNIDADES":
                 UnidadActual = GetUnidad(IdRegistro);
+                break;
+            case "RUTAS":
+                RutaActual = GetRuta(IdRegistro);
                 break;
         }
     }//GEN-LAST:event_jtTablaMouseClicked
@@ -1158,9 +1190,9 @@ public class Inicio extends javax.swing.JFrame {
             Class.forName("org.postgresql.Driver");
             Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
             java.sql.Statement sentencia = conexion.createStatement();
-            Object[] params = new Object[]{ruta.EstadoOrigen,ruta.EstadoDestino,ruta.CPOrigen,ruta.CPDestino,ruta.Estatus};
+            Object[] params = new Object[]{ruta.EstadoOrigen,ruta.EstadoDestino,ruta.CPOrigen,ruta.CPDestino,ruta.Kilometros,ruta.Estatus};
             String sql = 
-                    MessageFormat.format("INSERT INTO informacion.ruta(EstadoOrigen,EstadoDestino,CPOrigen,CPDestino,estatus) VALUES(''{0}'',''{1}'',{2},{3}, ''{4}'')", params);
+                    MessageFormat.format("INSERT INTO informacion.ruta(EstadoOrigen,EstadoDestino,CPOrigen,CPDestino,Kilometros,estatus) VALUES(''{0}'',''{1}'',{2},{3},{4}, ''{5}'')", params);
             
             sentencia.execute(sql);
             //Imprime los resultados de la tabla
@@ -1180,9 +1212,9 @@ public class Inicio extends javax.swing.JFrame {
             Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
             java.sql.Statement sentencia = conexion.createStatement();
 
-            Object[] params = new Object[]{RutaActual.IdRuta,ruta.EstadoOrigen,ruta.EstadoDestino,ruta.CPOrigen,ruta.CPDestino};
+            Object[] params = new Object[]{RutaActual.IdRuta,ruta.EstadoOrigen,ruta.EstadoDestino,ruta.CPOrigen,ruta.CPDestino,ruta.Kilometros};
             String sql = 
-                    MessageFormat.format("UPDATE informacion.ruta SET EstadoOrigen = ''{1}'',EstadoDestino = ''{2}'', CPOrigen = {3},CPDestino = {4}  WHERE IdRuta = {0}", params);
+                    MessageFormat.format("UPDATE informacion.ruta SET EstadoOrigen = ''{1}'',EstadoDestino = ''{2}'', CPOrigen = {3},CPDestino = {4},Kilometros = {5}  WHERE IdRuta = {0}", params);
             
             sentencia.execute(sql);
             //Imprime los resultados de la tabla
@@ -1201,7 +1233,7 @@ public class Inicio extends javax.swing.JFrame {
             Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
             java.sql.Statement sentencia = conexion.createStatement();
 
-            Object[] params = new Object[]{SucursalActual.IdSucursal};
+            Object[] params = new Object[]{RutaActual.IdRuta};
             String sql = 
                     MessageFormat.format("UPDATE informacion.ruta SET estatus = ''CANCELADO'' WHERE IdRuta = {0}", params);
             

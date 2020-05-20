@@ -15,23 +15,26 @@ public class Ruta {
     public String EstadoDestino;
     public int CPOrigen;
     public int CPDestino;
+    public double Kilometros;
     public String Estatus;
-    public static String[] Header = {"Id","Estado Origen","Estado Destino","CP Origen","CP Destino","Estatus"};
+    public static String[] Header = {"Id","Estado Origen","Estado Destino","CP Origen","CP Destino","Kilometros","Estatus"};
     
-    public Ruta(int idruta,String estadoorigen,String estadodestino,int cporigen,int cpdestino, String estatus){
+    public Ruta(int idruta,String estadoorigen,String estadodestino,int cporigen,int cpdestino,double kilometros, String estatus){
         IdRuta = idruta;
         EstadoOrigen = estadoorigen;
         EstadoDestino = estadodestino;
         CPOrigen = cporigen;
         CPDestino = cpdestino;
+        Kilometros = kilometros;
         Estatus = estatus;
     }
     
-    public Ruta(String estadoorigen,String estadodestino,int cporigen,int cpdestino, String estatus){
+    public Ruta(String estadoorigen,String estadodestino,int cporigen,int cpdestino,double kilometros, String estatus){
         EstadoOrigen = estadoorigen;
         EstadoDestino = estadodestino;
         CPOrigen = cporigen;
         CPDestino = cpdestino;
+        Kilometros = kilometros;
         Estatus = estatus;
     }
     
@@ -39,12 +42,13 @@ public class Ruta {
         try
         {
             String IdRuta = result.getString("idruta");
-            String EstadoOrigen = result.getString("nombre");
-            String EstadoDestino = result.getString("direccion");
+            String EstadoOrigen = result.getString("estadoorigen");
+            String EstadoDestino = result.getString("estadodestino");
             String CPOrigen = result.getString("cporigen");
             String CPDestino = result.getString("cpdestino");
+            String Kilometros = result.getString("kilometros");
             String Estatus = result.getString("estatus");
-            String row[] = {IdRuta,EstadoOrigen,EstadoDestino,CPOrigen,CPDestino,Estatus};
+            String row[] = {IdRuta,EstadoOrigen,EstadoDestino,CPOrigen,CPDestino,Kilometros,Estatus};
             return row;
         }
         catch(Exception error){
@@ -61,9 +65,10 @@ public class Ruta {
             String EstadoDestino = result.getString("estadodestino");
             String CPOrigen = result.getString("cporigen");
             String CPDestino = result.getString("cpdestino");
+            String Kilometros = result.getString("kilometros");
             String Estatus = result.getString("estatus");
 
-            Ruta ruta = new Ruta(Integer.parseInt(IdRuta),EstadoOrigen,EstadoDestino,Integer.parseInt(CPOrigen),Integer.parseInt(CPDestino),Estatus);
+            Ruta ruta = new Ruta(Integer.parseInt(IdRuta),EstadoOrigen,EstadoDestino,Integer.parseInt(CPOrigen),Integer.parseInt(CPDestino),Double.parseDouble(Kilometros),Estatus);
             return ruta;
         }
         catch(Exception error){

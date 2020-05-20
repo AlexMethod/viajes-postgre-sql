@@ -42,6 +42,7 @@ public class AgregarRuta extends javax.swing.JFrame {
             txtEstadoDestino.setText(ruta.EstadoDestino);
             txtCPOrigen.setText(ruta.CPOrigen + "");
             txtCPDestino.setText(ruta.CPDestino + "");
+            txtKilometros.setText(ruta.Kilometros + "");
             btnGuardar.setText("Editar");
             setVisible(true);
         } 
@@ -50,6 +51,7 @@ public class AgregarRuta extends javax.swing.JFrame {
             txtEstadoDestino.setText(ruta.EstadoDestino);
             txtCPOrigen.setText(ruta.CPOrigen + "");
             txtCPDestino.setText(ruta.CPDestino + "");
+            txtKilometros.setText(ruta.Kilometros + "");
             btnGuardar.setText("Eliminar");
             setVisible(true);
             
@@ -57,6 +59,7 @@ public class AgregarRuta extends javax.swing.JFrame {
             txtEstadoDestino.setEnabled(false);
             txtCPOrigen.setEnabled(false);
             txtCPDestino.setEnabled(false);
+            txtKilometros.setEnabled(false);
             btnGuardar.setText("Eliminar");
         }
     }
@@ -80,6 +83,8 @@ public class AgregarRuta extends javax.swing.JFrame {
         txtCPOrigen = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtCPDestino = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtKilometros = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 51, 51));
@@ -121,6 +126,11 @@ public class AgregarRuta extends javax.swing.JFrame {
 
         txtCPDestino.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
 
+        jLabel5.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
+        jLabel5.setText("Kilometros");
+
+        txtKilometros.setFont(new java.awt.Font("Gill Sans MT", 0, 10)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -142,18 +152,20 @@ public class AgregarRuta extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCPDestino)
                             .addComponent(txtCPOrigen)
-                            .addComponent(txtEstadoDestino))))
+                            .addComponent(txtEstadoDestino)
+                            .addComponent(txtKilometros))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtEstadoOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -169,7 +181,11 @@ public class AgregarRuta extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtCPDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtKilometros, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -193,8 +209,9 @@ public class AgregarRuta extends javax.swing.JFrame {
             String estadoDestino = txtEstadoDestino.getText();
             int cpOrigen = Integer.parseInt(txtCPOrigen.getText());
             int cpDestino = Integer.parseInt(txtCPDestino.getText());
+            double kilometros = Double.parseDouble(txtKilometros.getText());
             String estatus = "ACTIVO";
-            Ruta ruta = new Ruta(estadoOrigen,estadoDestino,cpOrigen,cpDestino,estatus);
+            Ruta ruta = new Ruta(estadoOrigen,estadoDestino,cpOrigen,cpDestino,kilometros,estatus);
 
             if(Accion == "ALTA"){
                 FormInicio.GuardaRuta(ruta);
@@ -258,9 +275,11 @@ public class AgregarRuta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField txtCPDestino;
     private javax.swing.JTextField txtCPOrigen;
     private javax.swing.JTextField txtEstadoDestino;
     private javax.swing.JTextField txtEstadoOrigen;
+    private javax.swing.JTextField txtKilometros;
     // End of variables declaration//GEN-END:variables
 }
