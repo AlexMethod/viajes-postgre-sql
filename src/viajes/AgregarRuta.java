@@ -5,6 +5,7 @@
  */
 package viajes;
 
+import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -62,6 +63,39 @@ public class AgregarRuta extends javax.swing.JFrame {
             txtKilometros.setEnabled(false);
             btnGuardar.setText("Eliminar");
         }
+    }
+    
+    public boolean isValid(Ruta ruta){
+        boolean response = true;
+        
+        if( ( ruta.EstadoOrigen.trim().equals(ruta.EstadoDestino.trim())) || (ruta.CPOrigen == ruta.CPDestino)  )
+        {
+            response = false;
+        }
+        
+        return response;
+    }
+    
+    public boolean isNotDuplicate(Ruta ruta){
+        boolean response = true;
+        
+        ArrayList<Ruta> rutas = FormInicio.GetRutas();
+        for(int i = 0; i < rutas.size(); i++){
+            Ruta r = rutas.get(i);
+            if(
+                    r.EstadoDestino.equals(ruta.EstadoDestino) && 
+                    r.EstadoOrigen.equals(ruta.EstadoOrigen) && 
+                    r.CPDestino == ruta.CPDestino &&
+                    r.CPOrigen == ruta.CPOrigen && 
+                    r.Kilometros == ruta.Kilometros)
+            {
+                response = true; 
+                break;
+            }
+        }
+        
+        
+        return response;
     }
 
     /**
@@ -213,15 +247,23 @@ public class AgregarRuta extends javax.swing.JFrame {
             String estatus = "ACTIVO";
             Ruta ruta = new Ruta(estadoOrigen,estadoDestino,cpOrigen,cpDestino,kilometros,estatus);
 
+            boolean isValido = isValid(ruta);
+            boolean isNotDuplicated = isNotDuplicate(ruta);
+            
             if(Accion == "ALTA"){
+                if(!isNotDuplicated) throw new Exception("Ya existe un registro con esos datos");
+                if(!isValido) throw new Exception("Los campos EstadoOrigen y EstadoDestino o CPOrigen y CPDestino no pueden ser iguales");
                 FormInicio.GuardaRuta(ruta);
             }
             else if(Accion == "EDITAR"){
+                if(!isNotDuplicated) throw new Exception("Ya existe un registro con esos datos");
+                if(!isValido) throw new Exception("Los campos EstadoOrigen y EstadoDestino o CPOrigen y CPDestino no pueden ser iguales");
                 FormInicio.EditaRuta(ruta);
             }
             else if(Accion == "ELIMINAR"){
                 FormInicio.EliminaRuta(ruta);
-            }
+            } 
+            
         }
         catch(Exception error){
             JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);

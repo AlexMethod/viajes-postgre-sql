@@ -24,8 +24,8 @@ public class Inicio extends javax.swing.JFrame {
     Unidad UnidadActual = null;
     Ruta RutaActual = null;
     Tarifa TarifaActual = null;
-//    Pedido PedidoActual = null;
-//    Viaje ViajeActual = null;
+    Pedido PedidoActual = null;
+    Viaje ViajeActual = null;
     
     //Modales para los formularios
     AgregarCliente modalAgregarCliente = null;
@@ -34,8 +34,8 @@ public class Inicio extends javax.swing.JFrame {
     AgregarUnidad modalAgregarUnidad = null;
     AgregarRuta modalAgregarRuta = null;
     AgregarTarifa modalAgregarTarifa = null;
-//    AgregarPedido modalAgregarPedido = null;
-//    AgregarViaje modalAgregarViaje = null;
+    AgregarPedido modalAgregarPedido = null;
+    AgregarViaje modalAgregarViaje = null;
     
     
     //Conexion con BD
@@ -106,6 +106,12 @@ public class Inicio extends javax.swing.JFrame {
                 case "TARIFAS":
                     md = new DefaultTableModel(data,Tarifa.Header);
                     jtTabla.setModel(md);
+                case "PEDIDOS":
+                    md = new DefaultTableModel(data,Pedido.Header);
+                    jtTabla.setModel(md);
+                case "VIAJES":
+                    md = new DefaultTableModel(data,Viaje.Header);
+                    jtTabla.setModel(md);
             }
 
             //Se itera sobre cada una de las tuplas para agregarlas a la tabla
@@ -130,6 +136,12 @@ public class Inicio extends javax.swing.JFrame {
                         row = Ruta.GetRow(result);
                         break;
                      case "TARIFAS":
+                        row = Tarifa.GetRow(result);
+                        break;
+                    case "PEDIDOS":
+                        row = Tarifa.GetRow(result);
+                        break;
+                    case "VIAJES":
                         row = Tarifa.GetRow(result);
                         break;
                 }
@@ -554,6 +566,13 @@ public class Inicio extends javax.swing.JFrame {
                 break;
             case "TARIFAS":
                 modalAgregarTarifa = new AgregarTarifa(this);
+                break;
+            case "PEDIDOS":
+                modalAgregarPedido = new AgregarPedido(this);
+                break;
+            case "VIAJES":
+                modalAgregarViaje = new AgregarViaje(this);
+                break;
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -595,6 +614,18 @@ public class Inicio extends javax.swing.JFrame {
                 if(TarifaActual != null){
                     modalAgregarTarifa = new AgregarTarifa(this);
                     modalAgregarTarifa.setVisible(TarifaActual,"ELIMINAR");
+                } 
+                break;
+            case "PEDIDOS":
+                if(PedidoActual != null){
+                    modalAgregarPedido = new AgregarPedido(this);
+                    modalAgregarPedido.setVisible(PedidoActual,"ELIMINAR");
+                } 
+                break;
+            case "VIAJES":
+                if(ViajeActual != null){
+                    modalAgregarViaje = new AgregarViaje(this);
+                    //modalAgregarViaje.setVisible(ViajeActual,"ELIMINAR");
                 } 
                 break;
         }
@@ -667,6 +698,13 @@ public class Inicio extends javax.swing.JFrame {
                 break;
             case "TARIFAS":
                 TarifaActual = GetTarifa(IdRegistro);
+                break;
+            case "PEDIDOS":
+                PedidoActual = GetPedido(IdRegistro);
+                break;
+            case "VIAJES":
+                //ViajeActual = GetTarifa(IdRegistro);
+                break;
         }
     }//GEN-LAST:event_jtTablaMouseClicked
 
@@ -1424,6 +1462,108 @@ public class Inicio extends javax.swing.JFrame {
         return tarifa;
     }
     
+    //TARIFAS
+    public void GuardaPedido(Pedido pedido){
+        
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+            Object[] params = new Object[]{pedido.IdClienteOrigen,pedido.IdClienteDestino,pedido.Delivery,pedido.Peso,pedido.Piezas,pedido.Estatus};
+            String sql = 
+                    MessageFormat.format("INSERT INTO Operacion.Pedido (IdClienteOrigen,IdClienteDestino,Delivery,Peso,Piezas,Estatus) VALUES({0},{1},''{2}'',{3},{4},''{5}'')", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("operacion","view_pedido");
+            modalAgregarPedido.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+            
+    }
+    public void EliminaPedido(Pedido pedido){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{PedidoActual.IdPedido};
+            String sql = 
+                    MessageFormat.format("UPDATE operacion.pedido SET estatus = ''CANCELADO'' WHERE IdPedido = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("operacion","view_pedido");
+            modalAgregarPedido.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public Pedido GetPedido(int idregistro){
+        
+        Pedido pedido = null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"operacion", "pedido",idregistro};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE IdPedido = {2}", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                pedido = Pedido.GetInstance(result);
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return pedido;
+    }
+    public ArrayList<Pedido> GetPedido(){
+        
+        ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"operacion", "pedido","ACTIVO"};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''{2}''", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                pedidos.add(Pedido.GetInstance(result));
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return pedidos;
+    }
     /**
      * @param args the command line arguments
      */
