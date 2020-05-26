@@ -13,31 +13,29 @@ import java.sql.ResultSet;
  */
 public class Tarifa {
     
-    public int IdCliente;
-    public String RazonSocial;
-    public String NombreComercial;
-    public String Tipo;
-    public String Direccion;
-    public double PorcentajeVenta;
+    public int IdTarifa;
+    public int IdRuta;
+    public int IdUnidad;
+    public int IdClienteFiscal;
+    public double CostoATransportista;
+    public double PrecioACliente;
     public String Estatus;
-    public static String Header[] = {"Id","Razón Social","Nombre Comercial","Tipo","Dirección","Porcentaje Venta","Estatus"};
+    public static String Header[] = {"Id","Ruta","Unidad","Cliente Fiscal","Precio","Costo","Estatus"};
     
-    public Tarifa(int idcliente,String razonsocial, String nombrecomercial,String tipo,String direccion,double porcentajeventa,String estatus){
-        IdCliente = idcliente;
-        RazonSocial = razonsocial;
-        NombreComercial = nombrecomercial;
-        Tipo = tipo;
-        Direccion = direccion;
-        PorcentajeVenta = porcentajeventa;
+    public Tarifa(int idtarifa,int idruta,int idunidad, int idclientefiscal,double precio, double costo,String estatus){
+        IdTarifa = idtarifa;
+        IdRuta = idruta;
+        IdUnidad = idunidad;
+        IdClienteFiscal = idclientefiscal;
+        PrecioACliente = precio;
+        CostoATransportista = costo;
         Estatus = estatus;
     }
     
-    public Tarifa(String razonsocial, String nombrecomercial,String tipo,String direccion,double porcentajeventa,String estatus){
-        RazonSocial = razonsocial;
-        NombreComercial = nombrecomercial;
-        Tipo = tipo;
-        Direccion = direccion;
-        PorcentajeVenta = porcentajeventa;
+    public Tarifa(int idruta,int idunidad, int idclientefiscal,String estatus){
+        IdRuta = idruta;
+        IdUnidad = idunidad;
+        IdClienteFiscal = idclientefiscal;
         Estatus = estatus;
     }
     
@@ -45,14 +43,14 @@ public class Tarifa {
         
         try
         {
-            String IdCliente = result.getString("idcliente");
-            String RazonSocial = result.getString("razonsocial");
-            String NombreComercial = result.getString("nombrecomercial");
-            String Tipo = result.getString("tipo");
-            String Direccion = result.getString("direccion");
-            String PorcentajeVenta = result.getString("porcentajeventa");
+            String IdTarifa = result.getString("idtarifa");
+            String Ruta = result.getString("ruta");
+            String Unidad = result.getString("unidad");
+            String ClienteFiscal = result.getString("clientefiscal");
+            String PrecioACliente = result.getString("precioacliente");
+            String CostoATransportista = result.getString("costoatransportista");
             String Estatus = result.getString("estatus");
-            String row[] = {IdCliente,RazonSocial,NombreComercial,Tipo,Direccion,PorcentajeVenta,Estatus};
+            String row[] = {IdTarifa,Ruta,Unidad,ClienteFiscal,PrecioACliente,CostoATransportista,Estatus};
             return row;
         }
         catch(Exception error){
@@ -67,16 +65,16 @@ public class Tarifa {
         
         try
         {
-            String IdCliente = result.getString("idcliente");
-            String RazonSocial = result.getString("razonsocial");
-            String NombreComercial = result.getString("nombrecomercial");
-            String Tipo = result.getString("tipo");
-            String Direccion = result.getString("direccion");
-            String PorcentajeVenta = result.getString("porcentajeventa");
+            String IdTarifa = result.getString("idtarifa");
+            String IdRuta = result.getString("idruta");
+            String IdUnidad = result.getString("idunidad");
+            String IdClienteFiscal = result.getString("idclientefiscal");
+            String PrecioACliente = result.getString("precioacliente");
+            String CostoATransportista = result.getString("costoatransportista");
             String Estatus = result.getString("estatus");
 
-            Tarifa cliente = new Tarifa(Integer.parseInt(IdCliente),RazonSocial,NombreComercial,Tipo,Direccion,Double.valueOf(PorcentajeVenta),Estatus);
-            return cliente;
+            Tarifa tarifa = new Tarifa(Integer.parseInt(IdTarifa),Integer.parseInt(IdRuta),Integer.parseInt(IdUnidad),Integer.parseInt(IdClienteFiscal),Double.valueOf(PrecioACliente),Double.valueOf(CostoATransportista),Estatus);
+            return tarifa;
         }
         catch(Exception error){
             return null;

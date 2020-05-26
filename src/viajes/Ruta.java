@@ -75,4 +75,9 @@ public class Ruta {
             return null;
         }
     }
+    
+    public String toString(){
+        
+        return EstadoOrigen + " => " + EstadoDestino;
+    }
 }

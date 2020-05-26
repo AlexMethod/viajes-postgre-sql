@@ -23,7 +23,7 @@ public class Inicio extends javax.swing.JFrame {
     Transportista TransportistaActual = null;
     Unidad UnidadActual = null;
     Ruta RutaActual = null;
-//    Tarifa TarifaActual = null;
+    Tarifa TarifaActual = null;
 //    Pedido PedidoActual = null;
 //    Viaje ViajeActual = null;
     
@@ -33,7 +33,7 @@ public class Inicio extends javax.swing.JFrame {
     AgregarTransportista modalAgregarTransportista = null;
     AgregarUnidad modalAgregarUnidad = null;
     AgregarRuta modalAgregarRuta = null;
-//    AgregarTarifa modalAgregarTarifa = null;
+    AgregarTarifa modalAgregarTarifa = null;
 //    AgregarPedido modalAgregarPedido = null;
 //    AgregarViaje modalAgregarViaje = null;
     
@@ -103,6 +103,9 @@ public class Inicio extends javax.swing.JFrame {
                     md = new DefaultTableModel(data,Ruta.Header);
                     jtTabla.setModel(md);
                     break;
+                case "TARIFAS":
+                    md = new DefaultTableModel(data,Tarifa.Header);
+                    jtTabla.setModel(md);
             }
 
             //Se itera sobre cada una de las tuplas para agregarlas a la tabla
@@ -125,6 +128,9 @@ public class Inicio extends javax.swing.JFrame {
                         break;
                     case "RUTAS":
                         row = Ruta.GetRow(result);
+                        break;
+                     case "TARIFAS":
+                        row = Tarifa.GetRow(result);
                         break;
                 }
                 md.addRow(row);
@@ -471,7 +477,7 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         CatalogoActual = "TARIFAS";
         txtTitle.setText(CatalogoActual);
-        
+        GetAllData("operacion","view_tarifa");
         //Configuración de botones
         btnAgregar.setVisible(true);
         btnEditar.setVisible(false);
@@ -546,6 +552,8 @@ public class Inicio extends javax.swing.JFrame {
             case "RUTAS":
                 modalAgregarRuta = new AgregarRuta(this);
                 break;
+            case "TARIFAS":
+                modalAgregarTarifa = new AgregarTarifa(this);
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -581,6 +589,12 @@ public class Inicio extends javax.swing.JFrame {
                 if(RutaActual != null){
                     modalAgregarRuta = new AgregarRuta(this);
                     modalAgregarRuta.setVisible(RutaActual,"ELIMINAR");
+                } 
+                break;
+            case "TARIFAS":
+                if(TarifaActual != null){
+                    modalAgregarTarifa = new AgregarTarifa(this);
+                    modalAgregarTarifa.setVisible(TarifaActual,"ELIMINAR");
                 } 
                 break;
         }
@@ -651,6 +665,8 @@ public class Inicio extends javax.swing.JFrame {
             case "RUTAS":
                 RutaActual = GetRuta(IdRegistro);
                 break;
+            case "TARIFAS":
+                TarifaActual = GetTarifa(IdRegistro);
         }
     }//GEN-LAST:event_jtTablaMouseClicked
 
@@ -1180,9 +1196,37 @@ public class Inicio extends javax.swing.JFrame {
         
         return unidad;
     }
+    public ArrayList<Unidad> GetUnidades(){
+        
+        ArrayList<Unidad> unidades = new ArrayList<Unidad>();
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"informacion", "unidad","ACTIVO"};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''{2}''", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                unidades.add(Unidad.GetInstance(result));
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return unidades;
+    }
     
-    
-    //SUCURSALES
+    //RUTAS
     public void GuardaRuta(Ruta ruta){
         
         try
@@ -1304,6 +1348,80 @@ public class Inicio extends javax.swing.JFrame {
         }
         
         return rutas;
+    }
+    
+    //TARIFAS
+    public void GuardaTarifa(Tarifa tarifa){
+        
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+            Object[] params = new Object[]{tarifa.IdRuta,tarifa.IdUnidad,tarifa.IdClienteFiscal,tarifa.Estatus};
+            String sql = 
+                    MessageFormat.format("INSERT INTO Operacion.Tarifa (IdRuta,IdUnidad,IdClienteFiscal,Estatus) VALUES({0},{1},{2},''{3}'')", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("operacion","view_tarifa");
+            modalAgregarTarifa.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+            
+    }
+    public void EliminaTarifa(Tarifa tarifa){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{TarifaActual.IdTarifa};
+            String sql = 
+                    MessageFormat.format("UPDATE operacion.tarifa SET estatus = ''CANCELADO'' WHERE IdTarifa = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("operacion","view_tarifa");
+            modalAgregarTarifa.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public Tarifa GetTarifa(int idregistro){
+        
+        Tarifa tarifa = null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"operacion", "tarifa",idregistro};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE IdTarifa = {2}", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                tarifa = Tarifa.GetInstance(result);
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return tarifa;
     }
     
     /**
