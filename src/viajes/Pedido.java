@@ -72,7 +72,8 @@ public class Pedido {
             String IdPedido = result.getString("idpedido");
             String IdClienteOrigen = result.getString("idclienteorigen");
             String IdClienteDestino = result.getString("idclientedestino");
-            String IdViaje = result.getString("idviaje");
+            String IdViaje = result.getString("idviaje") + "";
+            if(IdViaje.equals("null")) IdViaje = "0";
             String Delivery = result.getString("delivery");
             String Peso = result.getString("peso");
             String Piezas = result.getString("piezas");

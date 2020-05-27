@@ -106,12 +106,15 @@ public class Inicio extends javax.swing.JFrame {
                 case "TARIFAS":
                     md = new DefaultTableModel(data,Tarifa.Header);
                     jtTabla.setModel(md);
+                    break;
                 case "PEDIDOS":
                     md = new DefaultTableModel(data,Pedido.Header);
                     jtTabla.setModel(md);
+                    break;
                 case "VIAJES":
                     md = new DefaultTableModel(data,Viaje.Header);
                     jtTabla.setModel(md);
+                    break;
             }
 
             //Se itera sobre cada una de las tuplas para agregarlas a la tabla
@@ -139,10 +142,10 @@ public class Inicio extends javax.swing.JFrame {
                         row = Tarifa.GetRow(result);
                         break;
                     case "PEDIDOS":
-                        row = Tarifa.GetRow(result);
+                        row = Pedido.GetRow(result);
                         break;
                     case "VIAJES":
-                        row = Tarifa.GetRow(result);
+                        row = Viaje.GetRow(result);
                         break;
                 }
                 md.addRow(row);
@@ -501,7 +504,7 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         CatalogoActual = "PEDIDOS";
         txtTitle.setText(CatalogoActual);
-        
+        GetAllData("operacion","view_pedido");
         //Configuración de botones
         btnAgregar.setVisible(true);
         btnEditar.setVisible(false);
