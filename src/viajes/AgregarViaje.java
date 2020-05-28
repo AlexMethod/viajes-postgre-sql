@@ -44,19 +44,23 @@ public final class AgregarViaje extends javax.swing.JFrame {
         loadPedidos(null);
     }
     
-    public void loadPedidos(ComboboxItem defItem){
+    public void loadPedidos(Viaje viaje){
         listPedidos.removeAll();;
         DefaultListModel model = new DefaultListModel();
-        ArrayList<Pedido> pedidos = FormInicio.GetPedidos();
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+        if(viaje == null){
+            pedidos = FormInicio.GetPedidos();
+            
+        }else{
+            pedidos = FormInicio.GetPedidosxViaje(viaje.IdViaje);
+        }
         
         for(int i = 0; i < pedidos.size(); i++){
             Pedido p = pedidos.get(i);
             model.addElement(new ComboboxItem(p.Delivery,p.IdPedido));
         }
         listPedidos.setModel(model);
-        if(defItem != null){
-            listPedidos.setSelectedIndex(0);
-        }
+        
         
     }
     
@@ -105,6 +109,7 @@ public final class AgregarViaje extends javax.swing.JFrame {
     
     public void setVisible(Viaje viaje,String accion){
         Accion = accion;
+        loadPedidos(viaje);
         if(Accion == "EDITAR"){
             
             cboRuta.setSelectedIndex(getIndexOfItem(viaje.IdRuta));

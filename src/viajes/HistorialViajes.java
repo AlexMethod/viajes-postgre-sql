@@ -16,7 +16,7 @@ public class HistorialViajes {
     public int IdViaje;
     public String Fecha;
     public String Estatus;
-    public static String Header[] = {"Id","Fecha Alta","Estatus"};
+    public static String Header[] = {"Id","Folio","Fecha Alta","Estatus"};
     
     public static String[] GetRow(ResultSet result) throws Exception{
         
@@ -24,8 +24,9 @@ public class HistorialViajes {
         {
             String IdViaje = result.getString("idviaje");
             String FechaAlta = result.getString("FechaAlta");
+            String Folio = result.getString("Folio");
             String Estatus = result.getString("estatus");
-            String row[] = {IdViaje,FechaAlta,Estatus};
+            String row[] = {IdViaje,Folio,FechaAlta,Estatus};
             return row;
         }
         catch(Exception error){
