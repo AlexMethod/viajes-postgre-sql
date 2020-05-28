@@ -13,29 +13,30 @@ import java.sql.ResultSet;
  */
 public class Viaje {
     
-    public int IdTarifa;
+    public int IdViaje;
     public int IdRuta;
-    public int IdUnidad;
-    public int IdClienteFiscal;
-    public double CostoATransportista;
-    public double PrecioACliente;
+    public int IdSucursal;
+    public int IdTarifa;
+    public String Folio;
+    public double PesoTotal;
     public String Estatus;
-    public static String Header[] = {"Id","Ruta","Unidad","Cliente Fiscal","Precio","Costo","Estatus"};
+    public static String Header[] = {"Id","Folio","Ruta","Sucursal","Precio","Costo","PesoTotal","Estatus"};
     
-    public Viaje(int idtarifa,int idruta,int idunidad, int idclientefiscal,double precio, double costo,String estatus){
-        IdTarifa = idtarifa;
+    public Viaje(int idviaje,int idruta,int idsucursal, int idtarifa,String folio, double pesototal,String estatus){
+        IdViaje = idviaje;
         IdRuta = idruta;
-        IdUnidad = idunidad;
-        IdClienteFiscal = idclientefiscal;
-        PrecioACliente = precio;
-        CostoATransportista = costo;
+        IdSucursal = idsucursal;
+        IdTarifa = idtarifa;
+        Folio = folio;
+        PesoTotal = pesototal;
         Estatus = estatus;
     }
     
-    public Viaje(int idruta,int idunidad, int idclientefiscal,String estatus){
+    public Viaje(int idruta,int idsucursal,String folio, double pesototal,String estatus){
         IdRuta = idruta;
-        IdUnidad = idunidad;
-        IdClienteFiscal = idclientefiscal;
+        IdSucursal = idsucursal;
+        Folio = folio;
+        PesoTotal = pesototal;
         Estatus = estatus;
     }
     
@@ -43,14 +44,15 @@ public class Viaje {
         
         try
         {
-            String IdTarifa = result.getString("idtarifa");
+            String IdViaje = result.getString("idviaje");
+            String Folio = result.getString("folio");
             String Ruta = result.getString("ruta");
-            String Unidad = result.getString("unidad");
-            String ClienteFiscal = result.getString("clientefiscal");
-            String PrecioACliente = result.getString("precioacliente");
-            String CostoATransportista = result.getString("costoatransportista");
+            String Sucursal = result.getString("sucursal");
+            String Precio = result.getString("precio");
+            String Costo = result.getString("costo");
+            String PesoTotal = result.getString("pesototal");
             String Estatus = result.getString("estatus");
-            String row[] = {IdTarifa,Ruta,Unidad,ClienteFiscal,PrecioACliente,CostoATransportista,Estatus};
+            String row[] = {IdViaje,Folio,Ruta,Sucursal,Precio,Costo,PesoTotal,Estatus};
             return row;
         }
         catch(Exception error){
@@ -65,16 +67,16 @@ public class Viaje {
         
         try
         {
-            String IdTarifa = result.getString("idtarifa");
+            String IdViaje = result.getString("idviaje");
+            String Folio = result.getString("folio");
             String IdRuta = result.getString("idruta");
-            String IdUnidad = result.getString("idunidad");
-            String IdClienteFiscal = result.getString("idclientefiscal");
-            String PrecioACliente = result.getString("precioacliente");
-            String CostoATransportista = result.getString("costoatransportista");
+            String IdSucursal = result.getString("idsucursal");
+            String IdTarifa = result.getString("idtarifa");
+            String PesoTotal = result.getString("pesototal");
             String Estatus = result.getString("estatus");
 
-            Viaje tarifa = new Viaje(Integer.parseInt(IdTarifa),Integer.parseInt(IdRuta),Integer.parseInt(IdUnidad),Integer.parseInt(IdClienteFiscal),Double.valueOf(PrecioACliente),Double.valueOf(CostoATransportista),Estatus);
-            return tarifa;
+            Viaje viaje = new Viaje(Integer.parseInt(IdViaje),Integer.parseInt(IdRuta),Integer.parseInt(IdSucursal),Integer.parseInt(IdTarifa),Folio,Double.valueOf(PesoTotal),Estatus);
+            return viaje;
         }
         catch(Exception error){
             return null;

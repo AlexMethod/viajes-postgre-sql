@@ -62,6 +62,7 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar.setVisible(false);
         btnEditar.setVisible(false);
         btnEliminar.setVisible(false);
+        btnCambiarEstatus.setVisible(false);
         jtTabla.setVisible(false);
     }
     
@@ -74,7 +75,7 @@ public class Inicio extends javax.swing.JFrame {
             java.sql.Statement sentencia = conexion.createStatement();
 
             Object[] params = new Object[]{esquema, tabla};
-            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''ACTIVO''", params);
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus != ''CANCELADO''", params);
             
             ResultSet result = sentencia.executeQuery(sql);
             DefaultTableModel model = (DefaultTableModel) jtTabla.getModel();
@@ -115,6 +116,9 @@ public class Inicio extends javax.swing.JFrame {
                     md = new DefaultTableModel(data,Viaje.Header);
                     jtTabla.setModel(md);
                     break;
+                case "HISTORIAL_VIAJES":
+                    md = new DefaultTableModel(data,HistorialViajes.Header);
+                    jtTabla.setModel(md);
             }
 
             //Se itera sobre cada una de las tuplas para agregarlas a la tabla
@@ -147,6 +151,8 @@ public class Inicio extends javax.swing.JFrame {
                     case "VIAJES":
                         row = Viaje.GetRow(result);
                         break;
+                    case "HISTORIAL_VIAJES":
+                        row = HistorialViajes.GetRow(result);
                 }
                 md.addRow(row);
             }
@@ -187,6 +193,7 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
+        btnCambiarEstatus = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Viajes");
@@ -319,7 +326,7 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(btnViajes, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnHistorialViajes, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 22, Short.MAX_VALUE))
+                .addGap(0, 23, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 51, 51));
@@ -380,6 +387,14 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        btnCambiarEstatus.setBackground(new java.awt.Color(51, 255, 51));
+        btnCambiarEstatus.setText("Cambiar Estatus");
+        btnCambiarEstatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarEstatusActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -394,6 +409,8 @@ public class Inicio extends javax.swing.JFrame {
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnCambiarEstatus)
+                                .addGap(18, 18, 18)
                                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -415,8 +432,9 @@ public class Inicio extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCambiarEstatus, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -433,6 +451,7 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar.setVisible(true);
         btnEditar.setVisible(true);
         btnEliminar.setVisible(true);
+        btnCambiarEstatus.setVisible(false);
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnClientesActionPerformed
 
@@ -446,6 +465,7 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar.setVisible(true);
         btnEditar.setVisible(true);
         btnEliminar.setVisible(true);
+        btnCambiarEstatus.setVisible(false);
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnSucursalesActionPerformed
 
@@ -459,6 +479,7 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar.setVisible(true);
         btnEditar.setVisible(true);
         btnEliminar.setVisible(true);
+        btnCambiarEstatus.setVisible(false);
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnUnidadesActionPerformed
 
@@ -472,6 +493,7 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar.setVisible(true);
         btnEditar.setVisible(true);
         btnEliminar.setVisible(true);
+        btnCambiarEstatus.setVisible(false);
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnTransportistasActionPerformed
 
@@ -485,6 +507,7 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar.setVisible(true);
         btnEditar.setVisible(true);
         btnEliminar.setVisible(true);
+        btnCambiarEstatus.setVisible(false);
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnRutasActionPerformed
 
@@ -497,6 +520,7 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar.setVisible(true);
         btnEditar.setVisible(false);
         btnEliminar.setVisible(true);
+        btnCambiarEstatus.setVisible(false);
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnTarifasActionPerformed
 
@@ -509,6 +533,7 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar.setVisible(true);
         btnEditar.setVisible(false);
         btnEliminar.setVisible(true);
+        btnCambiarEstatus.setVisible(false);
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnPedidosActionPerformed
 
@@ -516,11 +541,12 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         CatalogoActual = "VIAJES";
         txtTitle.setText(CatalogoActual);
-        
+        GetAllData("Operacion","View_Viaje");
         //Configuración de botones
         btnAgregar.setVisible(true);
         btnEditar.setVisible(false);
         btnEliminar.setVisible(true);
+        btnCambiarEstatus.setVisible(true);
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnViajesActionPerformed
 
@@ -528,11 +554,12 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         CatalogoActual = "HISTORIAL_VIAJES";
         txtTitle.setText(CatalogoActual);
-        
+        GetAllData("operacion","view_historialviajes");
         //Configuración de botones
         btnAgregar.setVisible(false);
         btnEditar.setVisible(false);
         btnEliminar.setVisible(false);
+        btnCambiarEstatus.setVisible(false);
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnHistorialViajesActionPerformed
 
@@ -545,6 +572,7 @@ public class Inicio extends javax.swing.JFrame {
         btnAgregar.setVisible(false);
         btnEditar.setVisible(false);
         btnEliminar.setVisible(false);
+        btnCambiarEstatus.setVisible(false);
         jtTabla.setVisible(false);
     }//GEN-LAST:event_btnDashboardActionPerformed
 
@@ -628,7 +656,7 @@ public class Inicio extends javax.swing.JFrame {
             case "VIAJES":
                 if(ViajeActual != null){
                     modalAgregarViaje = new AgregarViaje(this);
-                    //modalAgregarViaje.setVisible(ViajeActual,"ELIMINAR");
+                    modalAgregarViaje.setVisible(ViajeActual,"ELIMINAR");
                 } 
                 break;
         }
@@ -706,10 +734,33 @@ public class Inicio extends javax.swing.JFrame {
                 PedidoActual = GetPedido(IdRegistro);
                 break;
             case "VIAJES":
-                //ViajeActual = GetTarifa(IdRegistro);
+                ViajeActual = GetViaje(IdRegistro);
                 break;
         }
     }//GEN-LAST:event_jtTablaMouseClicked
+
+    //CAMBIA ESTATUS
+    private void btnCambiarEstatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarEstatusActionPerformed
+        // TODO add your handling code here:
+        
+            String estatusActual = ViajeActual.Estatus;
+
+            if(estatusActual.equals("ACTIVO"))
+            {
+                ViajeActual.Estatus = "CARGA";
+            }else if(estatusActual.equals("CARGA"))
+            {
+                ViajeActual.Estatus = "RUTA";
+            }else if(estatusActual.equals("RUTA"))
+            {
+                ViajeActual.Estatus = "DESCARGA";
+            } else if(estatusActual.equals("DESCARGA"))
+            {
+                ViajeActual.Estatus = "FINALIZADO";
+            }
+
+            EditaViaje(ViajeActual);
+    }//GEN-LAST:event_btnCambiarEstatusActionPerformed
 
     
     //CLIENTES
@@ -1465,7 +1516,7 @@ public class Inicio extends javax.swing.JFrame {
         return tarifa;
     }
     
-    //TARIFAS
+    //PEDIDOS
     public void GuardaPedido(Pedido pedido){
         
         try
@@ -1538,7 +1589,7 @@ public class Inicio extends javax.swing.JFrame {
         
         return pedido;
     }
-    public ArrayList<Pedido> GetPedido(){
+    public ArrayList<Pedido> GetPedidos(){
         
         ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
         try{
@@ -1566,6 +1617,219 @@ public class Inicio extends javax.swing.JFrame {
         }
         
         return pedidos;
+    }
+    public ArrayList<Pedido> GetPedidosxViaje(int idviaje){
+        
+        ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"operacion", "pedido",idviaje};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE IdViaje = {2}", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                pedidos.add(Pedido.GetInstance(result));
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return pedidos;
+    }
+    public void GuardaIdViajePedido(int idpedido,int idviaje){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{idpedido,idviaje};
+            String sql = 
+                    MessageFormat.format("UPDATE operacion.pedido SET IdViaje = {1}  WHERE IdPedido = {0}", params);
+            
+            sentencia.execute(sql);
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void GuardaIdViajePedidos(ArrayList<Pedido> pedidos, int idviaje){
+        try
+        {
+          
+            for(int i = 0; i< pedidos.size(); i++){
+                
+                int idpedido = pedidos.get(i).IdPedido;
+                GuardaIdViajePedido(idpedido,idviaje);
+            }
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    //VIAJES
+    public void GuardaViaje(Viaje viaje){
+        
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+            Object[] params = new Object[]{viaje.IdRuta,viaje.IdSucursal,viaje.Folio,viaje.PesoTotal,viaje.Estatus};
+            String sql = 
+                    MessageFormat.format("INSERT INTO Operacion.Viaje (IdRuta,IdSucursal,Folio,PesoTotal,Estatus) VALUES({0},{1},''{2}'',{3},''{4}'')", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("operacion","view_viaje");
+            modalAgregarViaje.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+            
+    }
+    public void EliminaViaje(Viaje viaje){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{ViajeActual.IdViaje};
+            String sql = 
+                    MessageFormat.format("UPDATE operacion.viaje SET estatus = ''CANCELADO'' WHERE IdViaje = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("operacion","view_viaje");
+            modalAgregarViaje.dispose();
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void EditaViaje(Viaje viaje){
+        try
+        {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{ViajeActual.IdViaje,viaje.Estatus};
+            String sql = 
+                    MessageFormat.format("UPDATE operacion.viaje SET estatus = ''{1}'' WHERE IdViaje = {0}", params);
+            
+            sentencia.execute(sql);
+            //Imprime los resultados de la tabla
+            GetAllData("operacion","view_viaje");
+            conexion.close();
+        }
+        catch(Exception error){
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Error al editar el registro: ", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public Viaje GetViaje(int idregistro){
+        
+        Viaje viaje = null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"operacion", "viaje",idregistro};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE IdViaje = {2}", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                viaje = Viaje.GetInstance(result);
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return viaje;
+    }
+    public Viaje GetViaje(String folio){
+        
+        Viaje viaje = null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"operacion", "viaje",folio};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Folio = ''{2}'' AND Estatus != ''CANCELADO''", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                viaje = Viaje.GetInstance(result);
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return viaje;
+    }
+    public ArrayList<Viaje> GetViajes(){
+        
+        ArrayList<Viaje> viajes = new ArrayList<>();
+        try{
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
+            java.sql.Statement sentencia = conexion.createStatement();
+
+            Object[] params = new Object[]{"operacion", "viaje","ACTIVO"};
+            String sql = MessageFormat.format("SELECT * FROM {0}.{1} WHERE Estatus = ''{2}''", params);
+            
+            ResultSet result = sentencia.executeQuery(sql);
+            
+            //Se itera sobre la tupla encontrada si es que existe
+            while(result.next())
+            {
+                viajes.add(Viaje.GetInstance(result));
+            }
+            
+            result.close();
+            sentencia.close();
+            
+        }
+        catch(Exception error){
+            
+        }
+        
+        return viajes;
     }
     /**
      * @param args the command line arguments
@@ -1604,6 +1868,7 @@ public class Inicio extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnCambiarEstatus;
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnDashboard;
     private javax.swing.JButton btnEditar;

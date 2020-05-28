@@ -276,6 +276,7 @@ public class AgregarPedido extends javax.swing.JFrame {
             double piezas = Double.parseDouble(txtPiezas.getText());
             String estatus = "ACTIVO";
             Pedido pedido = new Pedido(idclienteorigen,idclientedestino,delivery,peso,piezas,estatus);
+            if(idclienteorigen == idclientedestino) throw new Exception("No se puede tener el mismo cliente de origen y destino");
 
             if(Accion == "ALTA"){
                 FormInicio.GuardaPedido(pedido);
@@ -286,7 +287,6 @@ public class AgregarPedido extends javax.swing.JFrame {
         }
         catch(Exception error){
             JOptionPane.showMessageDialog(null, error.getMessage(), "Error al guardar el registro: ", JOptionPane.ERROR_MESSAGE);
-            
         }
         
     }//GEN-LAST:event_btnGuardarActionPerformed
