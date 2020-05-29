@@ -61,6 +61,7 @@ public class Inicio extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         CatalogoActual = "DASHBOARD";
         txtTitle.setText(CatalogoActual);
+        txtUsuario.setText(user.toUpperCase());
         setVisible(true);
         
         //Configuracion botones
@@ -192,6 +193,8 @@ public class Inicio extends javax.swing.JFrame {
         btnViajes = new javax.swing.JButton();
         btnHistorialViajes = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        txtUsuario = new javax.swing.JLabel();
+        btnLogout = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtTabla = new javax.swing.JTable();
         txtTitle = new javax.swing.JLabel();
@@ -336,15 +339,36 @@ public class Inicio extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 51, 51));
 
+        txtUsuario.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
+        txtUsuario.setText("Title");
+
+        btnLogout.setBackground(new java.awt.Color(204, 153, 0));
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtUsuario)
+                .addGap(48, 48, 48)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 49, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtUsuario)
+                    .addComponent(btnLogout))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jtTabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -452,11 +476,22 @@ public class Inicio extends javax.swing.JFrame {
         txtTitle.setText(CatalogoActual);
         GetAllData("informacion","cliente");
         
-        //Configuración de botones
-        btnAgregar.setVisible(true);
-        btnEditar.setVisible(true);
-        btnEliminar.setVisible(true);
-        btnCambiarEstatus.setVisible(false);
+        //SE AFECTAN LOS PRIVILEGIOS SEGUN EL TIPO DE USUARIO
+        switch(usuario){
+            case "administrador":
+                SetButtonConfig(true,true,true,false);
+                break;
+            case "operador":
+                SetButtonConfig(false,false,false,false);
+                break;
+            case "consultor":
+                SetButtonConfig(false,false,false,false);
+                break;
+            default: 
+                SetButtonConfig(true,true,true,false);
+                break;
+        }
+            
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnClientesActionPerformed
 
@@ -466,11 +501,22 @@ public class Inicio extends javax.swing.JFrame {
         txtTitle.setText(CatalogoActual);
         GetAllData("informacion","sucursal");
         
-        //Configuración de botones
-        btnAgregar.setVisible(true);
-        btnEditar.setVisible(true);
-        btnEliminar.setVisible(true);
-        btnCambiarEstatus.setVisible(false);
+        //SE AFECTAN LOS PRIVILEGIOS SEGUN EL TIPO DE USUARIO
+        switch(usuario){
+            case "administrador":
+                SetButtonConfig(true,true,true,false);
+                break;
+            case "operador":
+                SetButtonConfig(false,false,false,false);
+                break;
+            case "consultor":
+                SetButtonConfig(false,false,false,false);
+                break;
+            default: 
+                SetButtonConfig(true,true,true,false);
+                break;
+        }
+        
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnSucursalesActionPerformed
 
@@ -479,12 +525,23 @@ public class Inicio extends javax.swing.JFrame {
         CatalogoActual = "UNIDADES";
         txtTitle.setText(CatalogoActual);
         GetAllData("informacion","view_unidad");
-        
-        //Configuración de botones
-        btnAgregar.setVisible(true);
-        btnEditar.setVisible(true);
-        btnEliminar.setVisible(true);
-        btnCambiarEstatus.setVisible(false);
+       
+        //SE AFECTAN LOS PRIVILEGIOS SEGUN EL TIPO DE USUARIO
+        switch(usuario){
+            case "administrador":
+                SetButtonConfig(true,true,true,false);
+                break;
+            case "operador":
+                SetButtonConfig(true,true,true,false);
+                break;
+            case "consultor":
+                SetButtonConfig(false,false,false,false);
+                break;
+            default: 
+                SetButtonConfig(true,true,true,false);
+                break;
+        }
+       
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnUnidadesActionPerformed
 
@@ -494,11 +551,22 @@ public class Inicio extends javax.swing.JFrame {
         txtTitle.setText(CatalogoActual);
         GetAllData("informacion","transportista");
         
-        //Configuración de botones
-        btnAgregar.setVisible(true);
-        btnEditar.setVisible(true);
-        btnEliminar.setVisible(true);
-        btnCambiarEstatus.setVisible(false);
+        //SE AFECTAN LOS PRIVILEGIOS SEGUN EL TIPO DE USUARIO
+        switch(usuario){
+            case "administrador":
+                SetButtonConfig(true,true,true,false);
+                break;
+            case "operador":
+                SetButtonConfig(true,true,true,false);
+                break;
+            case "consultor":
+                SetButtonConfig(false,false,false,false);
+                break;
+            default: 
+                SetButtonConfig(true,true,true,false);
+                break;
+        }
+        
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnTransportistasActionPerformed
 
@@ -508,11 +576,22 @@ public class Inicio extends javax.swing.JFrame {
         txtTitle.setText(CatalogoActual);
         GetAllData("informacion","ruta");
         
-        //Configuración de botones
-        btnAgregar.setVisible(true);
-        btnEditar.setVisible(true);
-        btnEliminar.setVisible(true);
-        btnCambiarEstatus.setVisible(false);
+        //SE AFECTAN LOS PRIVILEGIOS SEGUN EL TIPO DE USUARIO
+        switch(usuario){
+            case "administrador":
+                SetButtonConfig(true,true,true,false);
+                break;
+            case "operador":
+                SetButtonConfig(true,true,true,false);
+                break;
+            case "consultor":
+                SetButtonConfig(false,false,false,false);
+                break;
+            default: 
+                SetButtonConfig(true,true,true,false);
+                break;
+        }
+        
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnRutasActionPerformed
 
@@ -521,11 +600,23 @@ public class Inicio extends javax.swing.JFrame {
         CatalogoActual = "TARIFAS";
         txtTitle.setText(CatalogoActual);
         GetAllData("operacion","view_tarifa");
-        //Configuración de botones
-        btnAgregar.setVisible(true);
-        btnEditar.setVisible(false);
-        btnEliminar.setVisible(true);
-        btnCambiarEstatus.setVisible(false);
+        
+        //SE AFECTAN LOS PRIVILEGIOS SEGUN EL TIPO DE USUARIO
+        switch(usuario){
+            case "administrador":
+                SetButtonConfig(true,false,true,false);
+                break;
+            case "operador":
+                SetButtonConfig(false,false,false,false);
+                break;
+            case "consultor":
+                SetButtonConfig(false,false,false,false);
+                break;
+            default: 
+                SetButtonConfig(true,false,true,false);
+                break;
+        }
+        
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnTarifasActionPerformed
 
@@ -534,11 +625,23 @@ public class Inicio extends javax.swing.JFrame {
         CatalogoActual = "PEDIDOS";
         txtTitle.setText(CatalogoActual);
         GetAllData("operacion","view_pedido");
-        //Configuración de botones
-        btnAgregar.setVisible(true);
-        btnEditar.setVisible(false);
-        btnEliminar.setVisible(true);
-        btnCambiarEstatus.setVisible(false);
+        
+        //SE AFECTAN LOS PRIVILEGIOS SEGUN EL TIPO DE USUARIO
+        switch(usuario){
+            case "administrador":
+                SetButtonConfig(true,false,true,false);
+                break;
+            case "operador":
+                SetButtonConfig(true,false,true,false);
+                break;
+            case "consultor":
+                SetButtonConfig(false,false,false,false);
+                break;
+            default: 
+                SetButtonConfig(true,false,true,false);
+                break;
+        }
+        
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnPedidosActionPerformed
 
@@ -547,11 +650,23 @@ public class Inicio extends javax.swing.JFrame {
         CatalogoActual = "VIAJES";
         txtTitle.setText(CatalogoActual);
         GetAllData("Operacion","View_Viaje");
-        //Configuración de botones
-        btnAgregar.setVisible(true);
-        btnEditar.setVisible(false);
-        btnEliminar.setVisible(true);
-        btnCambiarEstatus.setVisible(true);
+        
+        //SE AFECTAN LOS PRIVILEGIOS SEGUN EL TIPO DE USUARIO
+        switch(usuario){
+            case "administrador":
+                SetButtonConfig(true,false,true,true);
+                break;
+            case "operador":
+                SetButtonConfig(true,false,true,true);
+                break;
+            case "consultor":
+                SetButtonConfig(false,false,false,false);
+                break;
+            default: 
+                SetButtonConfig(true,false,true,true);
+                break;
+        }
+        
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnViajesActionPerformed
 
@@ -560,11 +675,23 @@ public class Inicio extends javax.swing.JFrame {
         CatalogoActual = "HISTORIAL_VIAJES";
         txtTitle.setText(CatalogoActual);
         GetAllData("operacion","view_historialviajes");
-        //Configuración de botones
-        btnAgregar.setVisible(false);
-        btnEditar.setVisible(false);
-        btnEliminar.setVisible(false);
-        btnCambiarEstatus.setVisible(false);
+        
+        //SE AFECTAN LOS PRIVILEGIOS SEGUN EL TIPO DE USUARIO
+        switch(usuario){
+            case "administrador":
+                SetButtonConfig(false,false,false,false);
+                break;
+            case "operador":
+                SetButtonConfig(false,false,false,false);
+                break;
+            case "consultor":
+                SetButtonConfig(false,false,false,false);
+                break;
+            default: 
+                SetButtonConfig(false,false,false,false);
+                break;
+        }
+        
         jtTabla.setVisible(true);
     }//GEN-LAST:event_btnHistorialViajesActionPerformed
 
@@ -767,7 +894,19 @@ public class Inicio extends javax.swing.JFrame {
             EditaViaje(ViajeActual);
     }//GEN-LAST:event_btnCambiarEstatusActionPerformed
 
-    
+    //LOG OUT
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        InicioSesion sesion = new InicioSesion();
+        dispose();
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    public void SetButtonConfig(boolean isAgregar, boolean isEditar, boolean isEliminar,boolean isCambiarEstatus){
+        btnAgregar.setVisible(isAgregar);
+        btnEditar.setVisible(isEditar);
+        btnEliminar.setVisible(isEliminar);
+        btnCambiarEstatus.setVisible(isCambiarEstatus);
+    }
     //CLIENTES
     public void GuardaCliente(Cliente cliente){
         
@@ -1880,6 +2019,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnHistorialViajes;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnPedidos;
     private javax.swing.JButton btnRutas;
     private javax.swing.JButton btnSucursales;
@@ -1893,5 +2033,6 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jtTabla;
     private javax.swing.JLabel txtTitle;
+    private javax.swing.JLabel txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
