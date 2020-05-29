@@ -43,15 +43,20 @@ public class Inicio extends javax.swing.JFrame {
     String data[][] = {};
     
     String url = "jdbc:postgresql://localhost:5432/Viajes";
-    String usuario = "postgres";
-    String contrasena = "postgres";
+    String usuario = "";
+    String contrasena = "";
     
     
     private String CatalogoActual;
     /**
      * Creates new form Inicio
+     * @param user
+     * @param pass
      */
-    public Inicio() {
+    public Inicio(String user, String pass) {
+        usuario = user;
+        contrasena = pass;
+        
         initComponents();
         setLocationRelativeTo(null);
         CatalogoActual = "DASHBOARD";
@@ -161,7 +166,7 @@ public class Inicio extends javax.swing.JFrame {
             sentencia.close();
         }
         catch(Exception err){
-            System.out.println("Error al obtener los datos\n" + err.getMessage());
+            JOptionPane.showMessageDialog(null, err.getMessage(), "Error al obtener los datos: ", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -771,7 +776,7 @@ public class Inicio extends javax.swing.JFrame {
             Class.forName("org.postgresql.Driver");
             Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
             java.sql.Statement sentencia = conexion.createStatement();
-            Object[] params = new Object[]{cliente.RazonSocial, cliente.NombreComercial,cliente.Tipo,cliente.Direccion,cliente.PorcentajeVenta,cliente.Estatus};
+            Object[] params = new Object[]{cliente.RazonSocial, cliente.NombreComercial,cliente.Tipo,cliente.Direccion,Double.toString(cliente.PorcentajeVenta),cliente.Estatus};
             String sql = 
                     MessageFormat.format("INSERT INTO informacion.cliente(razonsocial,nombrecomercial,tipo,direccion,porcentajeventa,estatus) VALUES(''{0}'',''{1}'',''{2}'',''{3}'',{4},''{5}'')", params);
             
@@ -793,7 +798,7 @@ public class Inicio extends javax.swing.JFrame {
             Connection conexion = DriverManager.getConnection(url,usuario,contrasena);
             java.sql.Statement sentencia = conexion.createStatement();
 
-            Object[] params = new Object[]{ClienteActual.IdCliente,cliente.RazonSocial, cliente.NombreComercial,cliente.Tipo,cliente.Direccion,cliente.PorcentajeVenta};
+            Object[] params = new Object[]{ClienteActual.IdCliente,cliente.RazonSocial, cliente.NombreComercial,cliente.Tipo,cliente.Direccion,Double.toString(cliente.PorcentajeVenta)};
             String sql = 
                     MessageFormat.format("UPDATE informacion.cliente SET razonsocial = ''{1}'',nombrecomercial = ''{2}'',tipo = ''{3}'',direccion = ''{4}'',porcentajeventa = {5} WHERE IdCliente = {0}", params);
             
@@ -1861,7 +1866,8 @@ public class Inicio extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Inicio().setVisible(true);
+                
+                new Inicio("postgres","postgres").setVisible(true);
             }
         });
     }

@@ -16,7 +16,8 @@ public class Viajes {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Inicio inicio = new  Inicio();
+        InicioSesion inicioSesion = new InicioSesion();
+        //Inicio inicio = new  Inicio("postgres","postgres");
     }
     
 }
